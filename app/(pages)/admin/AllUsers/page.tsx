@@ -27,9 +27,9 @@ const AllUsers: React.FC = () => {
         name: '',
         email: '',
         role: '',
-        password: '', // add this line
-        createdAt: new Date(), // add this line
-        updatedAt: new Date(), // add this line
+        password: '',
+        createdAt: new Date(),
+        updatedAt: new Date(),
     });
 
     const fetchAllUsers = async () => {
