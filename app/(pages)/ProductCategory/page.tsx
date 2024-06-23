@@ -1,29 +1,31 @@
-"use client";
+'use client'
+import Footer from '@/app/_components/Footer';
+import Header from '@/app/_components/Header';
+import Navbar from '@/app/_components/Navbar';
+import { Product } from '@/types';
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react'
+import CategoryWiseProductDisplay from '@/app/_components/CategoryWiseProducts';
+import fetchCategoryWiseProduct from '@/helpers/fetchCategoryProduct';
+import addToCart from '@/helpers/addToCart';
+import { useAppContext } from '@/context';
+import Link from 'next/link';
+import scrollTop from '@/helpers/scrollTop';
+import displayINRCurrency from '@/helpers/displayCurrency';
 
-import React, { useEffect, useState } from "react";
-import fetchCategoryWiseProduct from "@/helpers/fetchCategoryProduct";
-import displayINRCurrency from "@/helpers/displayCurrency";
-import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
-import Link from "next/link";
-import addToCart from "@/helpers/addToCart";
-import { useAppContext } from "@/context";
-import scrollTop from "@/helpers/scrollTop";
-import { Product } from "@/types";
-
-interface CategoryWiseProductDisplayProps {
-  category: string;
-  heading: string;
+interface ProductCategoryPageProps {
+    category: string;
 }
 
-const CategoryWiseProductDisplay: React.FC<CategoryWiseProductDisplayProps> = ({
-  category,
-  heading,
-}) => {
+const ProductCategoryPage : React.FC<ProductCategoryPageProps> = ({category}) => {
   const [data, setData] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const loadingList = new Array(13).fill(null);
 
   const { fetchUserAddToCart } = useAppContext();
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const currentCategory = urlParams.get("category");
 
   const handleAddToCart = async (
     e: React.MouseEvent<HTMLButtonElement>,
@@ -33,23 +35,30 @@ const CategoryWiseProductDisplay: React.FC<CategoryWiseProductDisplayProps> = ({
     fetchUserAddToCart();
   };
 
-  const fetchData = async () => {
+  const fetchData = async (currentCategory: string) => {
     setLoading(true);
-    const categoryProduct = await fetchCategoryWiseProduct(category);
+    console.log(currentCategory);
+    const categoryProduct = await fetchCategoryWiseProduct(currentCategory);
     setLoading(false);
-
+    console.log(categoryProduct)
     setData(categoryProduct?.data);
   };
 
   useEffect(() => {
-    fetchData();
+    if (currentCategory) {
+        fetchData(currentCategory);
+      }
   }, []);
-
+ 
   return (
-    <div className="container mx-auto px-4 my-6 relative">
-      <h2 className="text-2xl font-semibold py-4">{heading}</h2>
-
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,320px))] justify-between md:gap-6 overflow-x-scroll scrollbar-none transition-all">
+    <>
+    <header className="fixed shadow-md bg-white w-full z-40">
+      <Header />
+      <Navbar />
+    </header>
+    <main className="p-28 w-full overflow-hidden scroll-smooth">
+      
+    <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,320px))] justify-between md:gap-6 overflow-x-scroll scrollbar-none transition-all">
         {loading
           ? loadingList.map((product, index) => (
               <div
@@ -109,8 +118,10 @@ const CategoryWiseProductDisplay: React.FC<CategoryWiseProductDisplayProps> = ({
               </Link>
             ))}
       </div>
-    </div>
-  );
-};
+    </main>
+    <Footer />
+  </>
+  )
+}
 
-export default CategoryWiseProductDisplay;
+export default ProductCategoryPage

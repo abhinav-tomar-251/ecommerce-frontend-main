@@ -46,7 +46,7 @@ const BackendApi = {
     },
     productDetails : {
         url : `${backendDomain}/api/product-details`,
-        method : 'post'
+        method : 'get'
     },
     addToCartProduct : {
         url : `${backendDomain}/api/addtocart`,

@@ -131,7 +131,7 @@ const Navbar = () => {
               </span>
 
               <div className="bg-gray-600 text-white w-5 h-5 rounded-full p-1 flex items-center justify-center absolute -top-2 -right-3">
-                <p className="text-sm">{cartProductCount}</p>
+                <p className="text-sm">{cartProductCount || 0}</p>
               </div>
             </Link>
           )}
@@ -140,7 +140,7 @@ const Navbar = () => {
             {user?._id ? (
               <button
                 onClick={handleLogout}
-                className="px-3 py-1 rounded-full text-white bg-gray-600 hover:bg-gray-700"
+                className="px-3 py-1 rounded-full text-white bg-gray-600 hover:bg-gray-700 "
               >
                 Logout
               </button>
