@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import BackendApi from "@/app/common";
 import { FaStar, FaStarHalf } from "react-icons/fa";
 import displayINRCurrency from "@/helpers/displayCurrency";
@@ -16,6 +16,9 @@ import Footer from "@/app/_components/Footer";
 
 const ProductDetails: React.FC = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const _id = searchParams.get("_id");
+
   const [data, setData] = useState<Product>({
     _id: "",
     productName: "",
@@ -28,9 +31,6 @@ const ProductDetails: React.FC = () => {
     createdAt: new Date(),
     updatedAt: new Date(),
   });
-
-  const urlParams = new URLSearchParams(window.location.search);
-  const _id = urlParams.get("_id");
 
   const [loading, setLoading] = useState(true);
   const productImageListLoading = new Array(4).fill(null);
@@ -80,7 +80,7 @@ const ProductDetails: React.FC = () => {
     if (_id) {
       fetchProductDetails(_id);
     }
-  }, []);
+  }, [_id]);
 
   const handleMouseEnterProduct = (imageURL: string) => {
     setActiveImage(imageURL);
@@ -122,7 +122,7 @@ const ProductDetails: React.FC = () => {
       router.push("/cart");
     }
   };
-
+  
   return (
     <>
       <header className="fixed shadow-md bg-white w-full z-40">

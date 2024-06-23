@@ -3,7 +3,7 @@ import Footer from '@/app/_components/Footer';
 import Header from '@/app/_components/Header';
 import Navbar from '@/app/_components/Navbar';
 import { Product } from '@/types';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import CategoryWiseProductDisplay from '@/app/_components/CategoryWiseProducts';
 import fetchCategoryWiseProduct from '@/helpers/fetchCategoryProduct';
@@ -24,8 +24,8 @@ const ProductCategoryPage : React.FC<ProductCategoryPageProps> = ({category}) =>
 
   const { fetchUserAddToCart } = useAppContext();
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const currentCategory = urlParams.get("category");
+  const searchParams = useSearchParams();
+  const currentCategory = searchParams.get("category");
 
   const handleAddToCart = async (
     e: React.MouseEvent<HTMLButtonElement>,
@@ -48,7 +48,7 @@ const ProductCategoryPage : React.FC<ProductCategoryPageProps> = ({category}) =>
     if (currentCategory) {
         fetchData(currentCategory);
       }
-  }, []);
+  }, [currentCategory]);
  
   return (
     <>
