@@ -30,8 +30,8 @@ const HomePage = () => {
         <CategoryList />
 
         <HorizontalCardProduct
-          category={"airpodes"}
-          heading={"Top's Airpodes"}
+          category={"airdopes"}
+          heading={"Top's Airdopes"}
         />
         <HorizontalCardProduct
           category={"watches"}

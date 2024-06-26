@@ -13,13 +13,17 @@ import { useRouter } from "next/navigation";
 import { useAppSelector } from "@/lib/hooks";
 import ROLE from "@/app/common/role";
 import { User } from "@/types";
+import { BounceLoader } from "react-spinners";
 
 const AllProducts = () => {
   const router = useRouter();
   const user = useAppSelector((state) => state?.user?.user) as User;
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     if (user?.role !== ROLE.ADMIN) {
+      setLoading(false);
       router.push("/");
     }
   }, [user, router]);
@@ -39,6 +43,8 @@ const AllProducts = () => {
   }, []);
 
   return (
+    <>
+    {loading? (
     <div className="min-h-[calc(100vh-120px)] md:flex hidden">
       <header className="fixed shadow-md bg-white w-full z-40">
         <Header />
@@ -76,7 +82,13 @@ const AllProducts = () => {
               href={"/admin/AllProducts"}
               className="px-2 py-1 hover:bg-slate-100"
             >
-              All product
+              All Products
+            </Link>
+            <Link
+              href={"/admin/AllOrders"}
+              className="px-2 py-1 hover:bg-slate-100"
+            >
+              All Orders
             </Link>
           </nav>
         </div>
@@ -117,6 +129,12 @@ const AllProducts = () => {
         </div>
       </main>
     </div>
+    ) : (
+      <div className="flex justify-center items-center h-screen">
+         <BounceLoader size={150} className="text-gray-800" loading />
+      </div>
+    )}
+  </>
   );
 };
 

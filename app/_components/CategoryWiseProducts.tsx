@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import fetchCategoryWiseProduct from "@/helpers/fetchCategoryProduct";
-import displayINRCurrency from "@/helpers/displayCurrency";
+import fetchCategoryWiseProduct from "@/actions/fetchCategoryProduct";
+import displayINRCurrency from "@/actions/displayCurrency";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import Link from "next/link";
-import addToCart from "@/helpers/addToCart";
+import addToCart from "@/actions/addToCart";
 import { useAppContext } from "@/context";
-import scrollTop from "@/helpers/scrollTop";
+import scrollTop from "@/actions/scrollTop";
 import { Product } from "@/types";
 
 interface CategoryWiseProductDisplayProps {

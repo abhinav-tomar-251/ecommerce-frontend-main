@@ -4,10 +4,10 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import BackendApi from "@/app/common";
 import { FaStar, FaStarHalf } from "react-icons/fa";
-import displayINRCurrency from "@/helpers/displayCurrency";
+import displayINRCurrency from "@/actions/displayCurrency";
 import VerticalCardProduct from "@/app/_components/VerticalCardProduct";
 import CategroyWiseProductDisplay from "@/app/_components/CategoryWiseProducts";
-import addToCart from "@/helpers/addToCart";
+import addToCart from "@/actions/addToCart";
 import { useAppContext } from "@/context";
 import { Product } from "@/types";
 import Header from "@/app/_components/Header";
@@ -119,10 +119,10 @@ const ProductDetails: React.FC = () => {
     if (_id) {
       await addToCart(e, _id);
       fetchUserAddToCart();
-      router.push("/cart");
+      router.push("/Cart");
     }
   };
-  
+
   return (
     <>
       <header className="fixed shadow-md bg-white w-full z-40">

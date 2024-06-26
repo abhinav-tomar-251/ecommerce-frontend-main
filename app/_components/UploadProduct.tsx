@@ -1,14 +1,13 @@
 "use client";
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import { CgClose } from "react-icons/cg";
-import productCategory from "@/helpers/productCategory";
+import productCategory from "@/actions/productCategory";
 import { FaCloudUploadAlt } from "react-icons/fa";
-import uploadImage from "@/helpers/uploadImage";
+import uploadImage from "@/actions/uploadImage";
 import DisplayImage from "./DisplayImage";
 import { MdDelete } from "react-icons/md";
 import BackendApi from "../common";
 import { toast } from "react-toastify";
-import Image from "next/image";
 
 interface ProductData {
   productName: string;
@@ -110,7 +109,7 @@ const UploadProduct: React.FC<UploadProductProps> = ({
   };
 
   return (
-    <div className="fixed w-full h-full bg-slate-200 bg-opacity-35 top-0 left-0 right-0 bottom-0 flex justify-center items-center">
+    <div className="fixed w-full h-full bg-slate-200 bg-opacity-35 top-10  left-0 right-0 bottom-0 flex justify-center items-center">
       <div className="bg-white p-4 rounded w-full max-w-2xl h-full max-h-[80%] overflow-hidden">
         <div className="flex justify-between items-center pb-3">
           <h2 className="font-bold text-lg">Upload Product</h2>
@@ -123,7 +122,7 @@ const UploadProduct: React.FC<UploadProductProps> = ({
         </div>
 
         <form
-          className="grid p-4 gap-2 overflow-y-scroll h-full pb-5"
+          className="grid p-4 gap-2 overflow-y-scroll scrollbar-none h-full pb-5"
           onSubmit={handleSubmit}
         >
           <label htmlFor="productName">Product Name :</label>
@@ -194,7 +193,7 @@ const UploadProduct: React.FC<UploadProductProps> = ({
               <div className="flex items-center gap-2">
                 {data.productImage.map((el, index) => (
                   <div className="relative group" key={index}>
-                    <Image
+                    <img
                       src={el}
                       alt={`product-${index}`}
                       width={80}

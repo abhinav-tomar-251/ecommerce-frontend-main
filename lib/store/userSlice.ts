@@ -1,25 +1,24 @@
-
-import { User } from '@/types'
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { User } from "@/types";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface UserState {
-  user: User | null
+  user: User | null;
 }
 
 const initialState: UserState = {
   user: null,
-}
+};
 
 export const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
   reducers: {
     setUserDetails: (state, action: PayloadAction<User | null>) => {
-      state.user = action.payload
+      state.user = action.payload;
     },
   },
-})
+});
 
-export const { setUserDetails } = userSlice.actions
+export const { setUserDetails } = userSlice.actions;
 
-export default userSlice.reducer
+export default userSlice.reducer;

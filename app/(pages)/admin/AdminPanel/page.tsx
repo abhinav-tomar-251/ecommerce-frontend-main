@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FaRegCircleUser } from "react-icons/fa6";
 import ROLE from "../../../common/role";
 import { User } from "@/types";
@@ -10,18 +10,24 @@ import Image from "next/image";
 import Link from "next/link";
 import Header from "@/app/_components/Header";
 import Navbar from "@/app/_components/Navbar";
+import { BounceLoader } from "react-spinners";
 
 const AdminPanel = () => {
   const router = useRouter();
   const user = useAppSelector((state) => state?.user?.user) as User;
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     if (user?.role !== ROLE.ADMIN) {
+      setLoading(false);
       router.push("/");
     }
   }, [user, router]);
 
   return (
+  <>
+    {loading? (
     <div className="min-h-[calc(100vh-120px)] md:flex hidden">
       <header className="fixed shadow-md bg-white w-full z-40">
         <Header />
@@ -59,7 +65,13 @@ const AdminPanel = () => {
               href={"/admin/AllProducts"}
               className="px-2 py-1 text-lg rounded-md shadow-sm hover:bg-slate-100"
             >
-              All product
+              All Products
+            </Link>
+            <Link
+              href={"/admin/AllOrders"}
+              className="px-2 py-1 text-lg rounded-md shadow-sm hover:bg-slate-100"
+            >
+              All Orders
             </Link>
           </nav>
         </div>
@@ -71,6 +83,12 @@ const AdminPanel = () => {
         </div>
       </main>
     </div>
+    ) : (
+      <div className="flex justify-center items-center h-screen">
+         <BounceLoader size={150} className="text-gray-800" loading />
+      </div>
+    )}
+  </>
   );
 };
 

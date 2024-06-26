@@ -1,14 +1,13 @@
 "use client";
 import React, { useState } from "react";
 import { CgClose } from "react-icons/cg";
-import productCategory from "@/helpers/productCategory";
+import productCategory from "@/actions/productCategory";
 import { FaCloudUploadAlt } from "react-icons/fa";
-import uploadImage from "@/helpers/uploadImage";
+import uploadImage from "@/actions/uploadImage";
 import DisplayImage from "./DisplayImage";
 import { MdDelete } from "react-icons/md";
 import BackendApi from "../common";
 import { toast } from "react-toastify";
-import Image from "next/image";
 
 interface ProductData {
   productName: string;
@@ -187,7 +186,7 @@ const AdminEditProduct: React.FC<AdminEditProductProps> = ({
               <div className="flex items-center gap-2">
                 {data.productImage.map((el, index) => (
                   <div key={`productImage-${index}`} className="relative group">
-                    <Image
+                    <img
                       src={el}
                       alt={el}
                       width={80}

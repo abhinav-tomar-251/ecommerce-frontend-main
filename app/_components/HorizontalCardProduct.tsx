@@ -1,10 +1,10 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import fetchCategoryWiseProduct from "@/helpers/fetchCategoryProduct";
-import displayINRCurrency from "@/helpers/displayCurrency";
+import fetchCategoryWiseProduct from "@/actions/fetchCategoryProduct";
+import displayINRCurrency from "@/actions/displayCurrency";
 import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
 import Link from "next/link";
-import addToCart from "@/helpers/addToCart";
+import addToCart from "@/actions/addToCart";
 import { useAppContext } from "@/context";
 import { Product } from "@/types";
 

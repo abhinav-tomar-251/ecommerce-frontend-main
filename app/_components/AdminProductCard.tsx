@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { MdModeEditOutline } from "react-icons/md";
 import AdminEditProduct from "./AdminEditProduct";
-import displayINRCurrency from "../../helpers/displayCurrency";
+import displayINRCurrency from "../../actions/displayCurrency";
 
 interface AdminProductCardProps {
   data: {
