@@ -12,16 +12,18 @@ const StripeSuccess = () => {
         <Header />
         <Navbar />
       </header>
+      <main className="pt-28 w-full ">
       <div className='bg-slate-200 w-full max-w-md mx-auto flex justify-center items-center flex-col p-4 m-2 rounded'>
-      <Image
-        src={success}
-        width={150}
-        height={150}
-        alt='success'
-      />
-      <p className='text-green-600 font-bold text-xl'>Payment Successfully</p>
-      <Link href={"/order"} className='p-2 px-3 mt-5 border-2 border-green-600 rounded font-semibold text-green-600 hover:bg-green-600 hover:text-white'>See Order</Link>
-    </div>
+        <Image
+          src={success}
+          width={150}
+          height={150}
+          alt='success'
+        />
+        <p className='text-green-600 font-bold text-xl'>Payment Successfull</p>
+        <Link href={"/Order"} className='p-2 px-3 mt-5 border-2 border-green-600 rounded font-semibold text-green-600 hover:bg-green-600 hover:text-white'>See Order</Link>
+      </div>
+      </main>
     </>
   )
 }

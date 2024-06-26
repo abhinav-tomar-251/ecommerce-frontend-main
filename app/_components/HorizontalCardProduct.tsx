@@ -102,11 +102,11 @@ const HorizontalCardProduct: React.FC<HorizontalCardProductProps> = ({
                   pathname: `/ProductDetails`,
                   query: { _id: product._id },
                 }}
-                className="w-full min-w-[280px] md:min-w-[320px] max-w-[280px] md:max-w-[320px] h-36 bg-white rounded-md shadow flex"
+                className="w-full min-w-[280px] md:min-w-[320px] max-w-[280px] md:max-w-[320px] h-36 bg-white rounded-md shadow-lg flex"
                 key={product?._id}
               >
                 <div className="bg-slate-200 h-full p-4 min-w-[120px] md:min-w-[145px]">
-                  <img
+                  <img 
                     src={product.productImage[0]}
                     alt={product.productName}
                     className="object-scale-down h-full hover:scale-110 transition-all"
