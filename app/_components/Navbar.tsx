@@ -50,16 +50,14 @@ const Navbar: React.FC = () => {
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setSearch(value);
-  };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (search.trim() !== "") {
-      router.push(`/ProductSearch?q=${search}`);
+    if (value) {
+      router.push(`/ProductSearch?q=${value}`);
     } else {
       router.push("/ProductSearch");
     }
   };
+
 
   return (
     <nav className="h-16 shadow-md bg-white w-full z-40">
@@ -70,24 +68,12 @@ const Navbar: React.FC = () => {
           </Link>
         </div>
 
-        <form
-          className="hidden lg:flex items-center w-full justify-between max-w-sm border rounded-full focus-within:shadow pl-2"
-          onSubmit={handleSubmit}
-        >
-          <input
-            type="text"
-            placeholder="search product here..."
-            className="w-full outline-none"
-            onChange={handleSearch}
-            value={search}
-          />
-          <button
-            type="submit"
-            className="text-lg min-w-[50px] h-8 bg-gray-600 flex items-center justify-center rounded-r-full text-white"
-          >
+        <div className='hidden lg:flex items-center w-full justify-between max-w-sm border rounded-full focus-within:shadow pl-2 cursor-pointer'>
+          <input type='text' placeholder='search product here...' className='w-full outline-none' onChange={handleSearch} value={search}/>
+          <div className='text-lg min-w-[50px] h-8 bg-gray-600 flex items-center justify-center rounded-r-full text-white'>
             <GrSearch />
-          </button>
-        </form>
+          </div>
+        </div>
 
         <div className="flex items-center gap-7">
           <div className="relative flex justify-center">

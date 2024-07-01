@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import axios from "axios";
 import BackendApi from "@/app/common";
 import { Product } from "@/types";
 import VerticalCard from "@/app/_components/VerticalCard";
@@ -18,16 +19,15 @@ const ProductSearch: React.FC = () => {
 
   const fetchProduct = async () => {
     if (!q) return;
-
-    setLoading(true);
     try {
-      const response = await fetch(`${BackendApi.searchProduct.url}?q=${q}`);
-      const dataResponse = await response.json();
-
-      setData(dataResponse.data);
+      setLoading(true);
+      const response = await axios.get(`${BackendApi.searchProduct.url}`, {
+        params: { q },
+      });
+      setData(response.data.data);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching products:", error);
-    } finally {
       setLoading(false);
     }
   };

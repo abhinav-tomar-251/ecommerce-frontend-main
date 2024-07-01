@@ -1,12 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import BackendApi from "@/app/common";
 import moment from "moment";
 import displayINRCurrency from "@/actions/displayCurrency";
 import Header from "@/app/_components/Header";
 import Navbar from "@/app/_components/Navbar";
 import Image from "next/image";
-
 
 interface ProductDetails {
   productId: string;
@@ -35,20 +35,25 @@ interface Order {
   totalAmount: string;
 }
 
-const OrderPage = () => {
+const OrderPage: React.FC = () => {
   const [data, setData] = useState<Order[]>([]);
 
-
   const fetchOrderDetails = async () => {
-    const response = await fetch(BackendApi.getOrder.url, {
-      method: BackendApi.getOrder.method,
-      credentials: "include",
-    });
-
-    const responseData = await response.json();
-
-    setData(responseData.data);
-    console.log("order list", responseData);
+    try {
+      const response = await axios.get<{ data: Order[] }>(BackendApi.getOrder.url, {
+        withCredentials: true,
+      });
+      setData(response.data.data);
+      console.log("order list", response.data);
+    } catch (error) {
+      let errorMessage = "An unknown error occurred";
+      if (axios.isAxiosError(error)) {
+        errorMessage = error.response?.data.message || error.message;
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      console.error("Error fetching order details:", errorMessage);
+    }
   };
 
   useEffect(() => {
@@ -57,13 +62,11 @@ const OrderPage = () => {
 
   return (
     <>
-    
       <div className="h-[calc(100vh-190px)] md:flex hidden overflow-y-hidden scrollbar-none">
         <header className="fixed shadow-md bg-white w-full z-40">
           <Header />
           <Navbar />
         </header>
-       
         <main className="w-full h-full pt-28">
           {!data[0] && (
             <p className="text-center text-4xl text-gray-700">
@@ -143,8 +146,7 @@ const OrderPage = () => {
           </div>
         </main>
       </div>
-   
-  </>
+    </>
   );
 };
 

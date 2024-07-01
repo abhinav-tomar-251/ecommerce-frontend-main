@@ -1,19 +1,42 @@
-const { default: BackendApi } = require("@/app/common");
+import axios from "axios";
+import BackendApi from "@/app/common";
 
-const fetchCategoryWiseProduct = async (category: string) => {
-  const response = await fetch(BackendApi.categoryWiseProduct.url, {
-    method: BackendApi.categoryWiseProduct.method,
-    headers: {
-      "content-type": "application/json",
-    },
-    body: JSON.stringify({
-      category: category,
-    }),
-  });
+interface CategoryWiseProductResponse {
+  success: boolean;
+  data: any;
+  message?: string;
+}
 
-  const dataResponse = await response.json();
+const fetchCategoryWiseProduct = async (category: string): Promise<CategoryWiseProductResponse> => {
+  try {
+    const response = await axios.post(
+      BackendApi.categoryWiseProduct.url,
+      { category },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        }
+      }
+    );
 
-  return dataResponse;
+    return response.data;
+  } catch (error) {
+    let errorMessage = "An unknown error occurred";
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        errorMessage = error.response.data.message || "Error fetching data";
+      } else if (error.request) {
+        errorMessage = "No response received from server";
+      } else {
+        errorMessage = error.message;
+      }
+    } else if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+
+    console.error("Error fetching category wise products:", errorMessage);
+    return { success: false, data: null, message: errorMessage };
+  }
 };
 
 export default fetchCategoryWiseProduct;
