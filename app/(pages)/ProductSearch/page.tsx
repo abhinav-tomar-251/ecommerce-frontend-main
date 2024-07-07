@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import axios from "axios";
 import BackendApi from "@/app/common";
 import { Product } from "@/types";
@@ -11,7 +11,7 @@ import Navbar from "@/app/_components/Navbar";
 import Header from "@/app/_components/Header";
 
 const ProductSearch: React.FC = () => {
-  const router = useRouter();
+
   const searchParams = useSearchParams();
   const q = searchParams.get("q");
   const [data, setData] = useState<Product[]>([]);

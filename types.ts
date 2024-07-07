@@ -18,6 +18,7 @@ export interface Product {
     productImage: string[];
     description: string;
     price: number;
+    rating: number;
     sellingPrice: number;
     createdAt: Date;
     updatedAt: Date;

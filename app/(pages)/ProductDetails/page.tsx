@@ -5,7 +5,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import BackendApi from "@/app/common";
 import { FaStar, FaStarHalf } from "react-icons/fa";
 import displayINRCurrency from "@/actions/displayCurrency";
-import VerticalCardProduct from "@/app/_components/VerticalCardProduct";
 import CategroyWiseProductDisplay from "@/app/_components/CategoryWiseProducts";
 import addToCart from "@/actions/addToCart";
 import { useAppContext } from "@/context";
@@ -28,6 +27,7 @@ const ProductDetails: React.FC = () => {
     productImage: [],
     description: "",
     price: 0,
+    rating: 0,
     sellingPrice: 0,
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -121,6 +121,22 @@ const ProductDetails: React.FC = () => {
       fetchUserAddToCart();
       router.push("/Cart");
     }
+  };
+
+   const renderStarRating = (rating: number) => {
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating - fullStars >= 0.1;
+
+    for (let i = 0; i < fullStars; i++) {
+      stars.push(<FaStar key={i} />);
+    }
+
+    if (hasHalfStar) {
+      stars.push(<FaStarHalf key="half-star" />);
+    }
+
+    return stars;
   };
 
   return (
@@ -224,11 +240,7 @@ const ProductDetails: React.FC = () => {
                 <p className="capitalize text-slate-400">{data?.category}</p>
 
                 <div className="text-gray-600 flex items-center gap-1">
-                  <FaStar />
-                  <FaStar />
-                  <FaStar />
-                  <FaStar />
-                  <FaStarHalf />
+                  {renderStarRating(data?.rating)} <span>{data?.rating}</span>
                 </div>
 
                 <div className="flex items-center gap-2 text-2xl lg:text-3xl font-medium my-1">
@@ -269,6 +281,7 @@ const ProductDetails: React.FC = () => {
             <CategroyWiseProductDisplay
               category={data?.category}
               heading={"Recommended Product"}
+              excludeProductId={data._id}
             />
           )}
         </div>

@@ -16,6 +16,7 @@ interface ProductData {
   productImage: string[];
   description: string;
   price: number;
+  rating: number;
   sellingPrice: number;
 }
 
@@ -102,7 +103,7 @@ const AdminEditProduct: React.FC<AdminEditProductProps> = ({
   };
 
   return (
-    <div className="fixed w-full h-full bg-slate-200 bg-opacity-35 top-0 left-0 right-0 bottom-0 flex justify-center items-center">
+    <div className="fixed w-full h-full bg-slate-200 bg-opacity-35 top-14 left-0 right-0 bottom-0 flex justify-center items-center">
       <div className="bg-white p-4 rounded w-full max-w-2xl h-full max-h-[80%] overflow-hidden">
         <div className="flex justify-between items-center pb-3">
           <h2 className="font-bold text-lg">Edit Product</h2>
@@ -115,7 +116,7 @@ const AdminEditProduct: React.FC<AdminEditProductProps> = ({
         </div>
 
         <form
-          className="grid p-4 gap-2 overflow-y-scroll h-full pb-5"
+          className="grid p-4 gap-2 overflow-y-scroll scrollbar-none h-full pb-5"
           onSubmit={handleSubmit}
         >
           <label htmlFor="productName">Product Name :</label>
@@ -220,7 +221,7 @@ const AdminEditProduct: React.FC<AdminEditProductProps> = ({
             type="number"
             id="price"
             placeholder="enter price"
-            value={data.price.toString()} // Convert number to string for input value
+            value={data.price.toString()}
             name="price"
             onChange={handleOnChange}
             className="p-2 bg-slate-100 border rounded"
@@ -236,6 +237,20 @@ const AdminEditProduct: React.FC<AdminEditProductProps> = ({
             placeholder="enter selling price"
             value={data.sellingPrice.toString()} // Convert number to string for input value
             name="sellingPrice"
+            onChange={handleOnChange}
+            className="p-2 bg-slate-100 border rounded"
+            required
+          />
+
+          <label htmlFor="rating" className="mt-3">
+            Rating :
+          </label>
+          <input
+            type="number"
+            id="rating"
+            placeholder="enter rating"
+            value={data.rating}
+            name="rating"
             onChange={handleOnChange}
             className="p-2 bg-slate-100 border rounded"
             required

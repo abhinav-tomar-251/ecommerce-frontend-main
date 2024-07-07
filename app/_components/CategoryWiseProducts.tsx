@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import fetchCategoryWiseProduct from "@/actions/fetchCategoryProduct";
 import displayINRCurrency from "@/actions/displayCurrency";
-import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import Link from "next/link";
 import addToCart from "@/actions/addToCart";
 import { useAppContext } from "@/context";
@@ -13,11 +12,13 @@ import { Product } from "@/types";
 interface CategoryWiseProductDisplayProps {
   category: string;
   heading: string;
+  excludeProductId?: string;  // Added excludeProductId prop
 }
 
 const CategoryWiseProductDisplay: React.FC<CategoryWiseProductDisplayProps> = ({
   category,
   heading,
+  excludeProductId,  // Added excludeProductId prop
 }) => {
   const [data, setData] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -38,12 +39,17 @@ const CategoryWiseProductDisplay: React.FC<CategoryWiseProductDisplayProps> = ({
     const categoryProduct = await fetchCategoryWiseProduct(category);
     setLoading(false);
 
-    setData(categoryProduct?.data);
+    // Filter out the product with the excludeProductId
+    const filteredProducts = categoryProduct?.data.filter(
+      (product: Product) => product._id !== excludeProductId
+    );
+
+    setData(filteredProducts);
   };
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [category, excludeProductId]);  // Added excludeProductId dependency
 
   return (
     <div className="container mx-auto px-4 my-6 relative">
@@ -51,7 +57,7 @@ const CategoryWiseProductDisplay: React.FC<CategoryWiseProductDisplayProps> = ({
 
       <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,320px))] justify-between md:gap-6 overflow-x-scroll scrollbar-none transition-all">
         {loading
-          ? loadingList.map((product, index) => (
+          ? loadingList.map((_, index) => (
               <div
                 key={index}
                 className="w-full min-w-[280px]  md:min-w-[320px] max-w-[280px] md:max-w-[320px]  bg-white rounded-md shadow"
@@ -68,7 +74,7 @@ const CategoryWiseProductDisplay: React.FC<CategoryWiseProductDisplayProps> = ({
                 </div>
               </div>
             ))
-          : data.map((product, index) => (
+          : data.map((product) => (
               <Link
                 key={product._id}
                 href={{

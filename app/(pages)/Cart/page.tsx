@@ -1,131 +1,39 @@
+// pages/cart.tsx
 "use client";
 
-import React, { useContext, useEffect, useState } from "react";
-import BackendApi from "@/app/common";
-import { useAppContext } from "@/context";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/store/store";
+import {  useAppDispatch } from "@/lib/hooks";
+import { fetchCart, updateCart, deleteCartProduct } from "@/lib/store/cartSlice";
 import displayINRCurrency from "@/actions/displayCurrency";
 import { MdDelete } from "react-icons/md";
 import Header from "@/app/_components/Header";
 import Navbar from "@/app/_components/Navbar";
 import Footer from "@/app/_components/Footer";
 import { loadStripe } from "@stripe/stripe-js";
-// import { Product } from '@/types'
-
-interface Product {
-  _id: string;
-  quantity: number;
-  productId: {
-    productName: string;
-    productImage: string[];
-    category: string;
-    sellingPrice: number;
-  };
-}
+import axios from 'axios';
+import { BounceLoader } from "react-spinners";
+import BackendApi from "@/app/common";
 
 const CartPage: React.FC = () => {
-  const [data, setData] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(false);
-  const context = useAppContext();
-  const loadingCart = new Array(4).fill(null);
-
-  const fetchData = async () => {
-    const response = await fetch(BackendApi.addToCartProductView.url, {
-      method: BackendApi.addToCartProductView.method,
-      credentials: "include",
-      headers: {
-        "content-type": "application/json",
-      },
-    });
-
-    const responseData = await response.json();
-
-    if (responseData.success) {
-      setData(responseData.data);
-    }
-  };
-
-  const handleLoading = async () => {
-    await fetchData();
-  };
+  const dispatch = useAppDispatch();
+  const { data, loading } = useSelector((state: RootState) => state.cart);
 
   useEffect(() => {
-    setLoading(true);
-    handleLoading();
-    setLoading(false);
-  }, []);
+    dispatch(fetchCart());
+  }, [dispatch]);
 
-  const increaseQty = async (id: string, qty: number) => {
-    const response = await fetch(BackendApi.updateCartProduct.url, {
-      method: BackendApi.updateCartProduct.method,
-      credentials: "include",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        _id: id,
-        quantity: qty + 1,
-      }),
-    });
-
-    const responseData = await response.json();
-    
-    if (responseData.success) {
-      fetchData();
-    }
+  const handleUpdateQuantity = (id: string, quantity: number) => {
+    dispatch(updateCart({ id, quantity }));
   };
 
-  const decreaseQty = async (id: string, qty: number) => {
-    if (qty >= 2) {
-      const response = await fetch(BackendApi.updateCartProduct.url, {
-        method: BackendApi.updateCartProduct.method,
-        credentials: "include",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
-          _id: id,
-          quantity: qty - 1,
-        }),
-      });
-
-      const responseData = await response.json();
-
-      if (responseData.success) {
-        fetchData();
-      }
-    }
+  const handleDeleteCartProduct = (id: string) => {
+    dispatch(deleteCartProduct(id));
   };
 
-  const deleteCartProduct = async (id: string) => {
-    const response = await fetch(BackendApi.deleteCartProduct.url, {
-      method: BackendApi.deleteCartProduct.method,
-      credentials: "include",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        _id: id,
-      }),
-    });
-
-    const responseData = await response.json();
-
-    if (responseData.success) {
-      fetchData();
-      context.fetchUserAddToCart();
-    }
-  };
-
-  const totalQty = data.reduce(
-    (previousValue, currentValue) => previousValue + currentValue.quantity,
-    0
-  );
-  const totalPrice = data.reduce(
-    (previousValue, currentValue) =>
-      previousValue +
-      currentValue.quantity * currentValue?.productId?.sellingPrice,
-    0
-  );
+  const totalQty = data.reduce((prev, curr) => prev + curr.quantity, 0);
+  const totalPrice = data.reduce((prev, curr) => prev + curr.quantity * curr?.productId?.sellingPrice, 0);
 
   const handlePayment = async () => {
     const stripePublicKey = process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY;
@@ -151,12 +59,12 @@ const CartPage: React.FC = () => {
     });
 
     const responseData = await response.json();
-   
+
     if (responseData?.id) {
       const { error } = await stripe.redirectToCheckout({
         sessionId: responseData.id,
       });
-     
+
       if (error) {
         console.error("Failed to redirect to checkout:", error);
       }
@@ -164,6 +72,7 @@ const CartPage: React.FC = () => {
       console.error("No session ID returned from backend");
     }
   };
+
 
   return (
     <>
@@ -173,47 +82,47 @@ const CartPage: React.FC = () => {
       </header>
       <main className="pt-28 w-full overflow-hidden scroll-smooth">
         <div className="container mx-auto">
-          <div className="text-center text-lg my-3">
+          <div className="text-center text-3xl my-3">
             {data.length === 0 && !loading && (
-              <p className="bg-white py-5">Cart is Empty</p>
+              <div className="flex justify-center items-center h-screen">
+                <BounceLoader size={150} className="text-gray-800" loading />
+                <p className="bg-white py-5">Cart is Empty</p>
+              </div>
             )}
           </div>
-
           <div className="flex flex-col lg:flex-row gap-10 lg:justify-between p-4">
-            {/*** view product */}
             <div className="w-full max-w-3xl">
               {loading
-                ? loadingCart.map((el, index) => (
+                ? Array(4).fill(null).map((_, index) => (
                     <div
                       key={`loading-${index}`}
                       className="w-full bg-slate-200 h-32 my-2 border border-slate-300 animate-pulse rounded"
                     ></div>
                   ))
-                : data.map((product, index) => (
+                : data.map((product) => (
                     <div
-                      key={product?._id}
+                      key={product._id}
                       className="w-full bg-white h-32 my-2 border border-slate-300 rounded grid grid-cols-[128px,1fr]"
                     >
                       <div className="w-32 h-32 bg-slate-200">
                         <img
-                          src={product?.productId?.productImage[0]}
+                          src={product.productId.productImage[0]}
                           className="w-full h-full object-scale-down mix-blend-multiply"
+                          alt={product.productId.productName}
                         />
                       </div>
                       <div className="px-4 py-2 relative">
-                        {/**delete product */}
                         <div
                           className="absolute right-0 text-gray-600 rounded-full p-2 hover:bg-gray-600 hover:text-white cursor-pointer"
-                          onClick={() => deleteCartProduct(product?._id)}
+                          onClick={() => handleDeleteCartProduct(product._id)}
                         >
                           <MdDelete />
                         </div>
-
                         <h2 className="text-lg lg:text-xl text-ellipsis line-clamp-1">
-                          {product?.productId?.productName}
+                          {product.productId.productName}
                         </h2>
                         <p className="capitalize text-slate-500">
-                          {product?.productId.category}
+                          {product.productId.category}
                         </p>
                         <div className="flex items-center justify-between">
                           <p className="text-gray-600 font-medium text-lg">
@@ -228,64 +137,56 @@ const CartPage: React.FC = () => {
                             )}
                           </p>
                         </div>
+             
                         <div className="flex items-center gap-3 mt-1">
                           <button
-                            className="border border-gray-600 text-gray-600 hover:bg-gray-600 hover:text-white w-6 h-6 flex justify-center items-center rounded "
-                            onClick={() =>
-                              decreaseQty(product?._id, product?.quantity)
-                            }
+                            className="border border-gray-600 text-gray-600 hover:bg-gray-600 hover:text-white w-6 h-6 flex justify-center items-center rounded"
+                            onClick={() => handleUpdateQuantity(product?._id, product?.quantity - 1)}
+                            disabled={product?.quantity <= 1} 
                           >
                             -
                           </button>
                           <span>{product?.quantity}</span>
                           <button
-                            className="border border-gray-600 text-gray-600 hover:bg-gray-600 hover:text-white w-6 h-6 flex justify-center items-center rounded "
-                            onClick={() =>
-                              increaseQty(product?._id, product?.quantity)
-                            }
+                            className="border border-gray-600 text-gray-600 hover:bg-gray-600 hover:text-white w-6 h-6 flex justify-center items-center rounded"
+                            onClick={() => handleUpdateQuantity(product?._id, product?.quantity + 1)}
                           >
                             +
                           </button>
                         </div>
+
                       </div>
-                    </div>
+                      </div>
+                  
                   ))}
             </div>
-
-            {/*** cart summary  */}
-            {data[0] && (
-              <div className="mt-5 lg:mt-0 w-full max-w-sm">
-                {loading ? (
-                  <div className="h-36 bg-slate-200 border border-slate-300 animate-pulse" />
-                ) : (
-                  <div className="h-36 bg-white rounded-md shadow-md px-2">
-                    <h2 className="text-white bg-gray-600 px-4 py-1 rounded-sm">
-                      Cart Summary
-                    </h2>
-                    <div className="flex items-center justify-between px-4 gap-2 font-medium text-lg text-slate-600">
-                      <p>Quantity</p>
-                      <p>{totalQty}</p>
-                    </div>
-
-                    <div className="flex items-center justify-between px-4 gap-2 font-medium text-lg text-slate-600">
-                      <p>Total Price</p>
-                      <p>{displayINRCurrency(totalPrice)}</p>
-                    </div>
-
-                    <button
-                      onClick={handlePayment}
-                      className="bg-gray-800 p-2 text-white w-full rounded-md mt-2 hover:bg-gray-500"
-                    >
-                      Checkout
-                    </button>
-                  </div>
-                )}
+            {data.length > 0 && (
+              <div className="w-full lg:w-96 p-4 bg-white border border-slate-300 h-max rounded">
+                <h2 className="text-xl font-semibold">Summary</h2>
+                <div className="py-2 my-4 border-b border-slate-200 flex justify-between items-center">
+                  <span>Total Items:</span>
+                  <span>{totalQty}</span>
+                </div>
+                <div className="py-2 my-4 border-b border-slate-200 flex justify-between items-center">
+                  <span>Total Price:</span>
+                  <span>{displayINRCurrency(totalPrice)}</span>
+                </div>
+                <div className="w-full text-center mt-2">
+                  <button
+                    className="bg-gray-600 text-white font-medium py-1 px-4 w-full"
+                    onClick={handlePayment}
+                  >
+                    Checkout
+                  </button>
+                </div>
               </div>
             )}
           </div>
         </div>
       </main>
-      <Footer />
+      <footer className="relative bottom-0 left-0 right-0">
+        <Footer />
+      </footer>
     </>
   );
 };

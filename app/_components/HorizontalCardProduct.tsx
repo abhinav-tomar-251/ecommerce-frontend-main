@@ -66,13 +66,13 @@ const HorizontalCardProduct: React.FC<HorizontalCardProductProps> = ({
         ref={scrollElement}
       >
         <button
-          className="  p-1 absolute left-0 text-lg hidden md:block"
+          className="p-1 absolute -left-2 text-lg hidden md:block"
           onClick={scrollLeft}
         >
           <SlArrowLeft />
         </button>
         <button
-          className="  p-1 absolute right-0 text-lg hidden md:block"
+          className="  p-1 absolute right-2 text-lg hidden md:block"
           onClick={scrollRight}
         >
           <SlArrowRight />
@@ -102,11 +102,11 @@ const HorizontalCardProduct: React.FC<HorizontalCardProductProps> = ({
                   pathname: `/ProductDetails`,
                   query: { _id: product._id },
                 }}
-                className="w-full min-w-[280px] md:min-w-[320px] max-w-[280px] md:max-w-[320px] h-36 bg-white rounded-md shadow-lg flex"
+                className="w-full min-w-[280px] md:min-w-[320px] max-w-[280px] md:max-w-[320px] h-36 bg-white rounded-md shadow flex"
                 key={product?._id}
               >
                 <div className="bg-slate-200 h-full p-4 min-w-[120px] md:min-w-[145px]">
-                  <img 
+                  <img
                     src={product.productImage[0]}
                     alt={product.productName}
                     className="object-scale-down h-full hover:scale-110 transition-all"

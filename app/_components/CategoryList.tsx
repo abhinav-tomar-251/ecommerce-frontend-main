@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import BackendApi from "../common";
 import Link from "next/link";
 import { Product } from "@/types";
+import axios from "axios";
 
 const CategoryList: React.FC = () => {
   const [categoryProduct, setCategoryProduct] = useState<Product[]>([]);
@@ -13,8 +14,8 @@ const CategoryList: React.FC = () => {
   const fetchCategoryProduct = async () => {
     setLoading(true);
     try {
-      const response = await fetch(BackendApi.categoryProduct.url);
-      const dataResponse = await response.json();
+      const response = await axios.get(BackendApi.categoryProduct.url);
+      const dataResponse = await response.data;
       setCategoryProduct(dataResponse.data);
     } catch (error) {
       console.error("Error fetching category products:", error);

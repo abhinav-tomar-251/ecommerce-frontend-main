@@ -10,6 +10,7 @@ import BackendApi from "@/app/common";
 import { setUserDetails } from "../lib/store/userSlice";
 import { useAppDispatch } from "@/lib/hooks";
 import { User } from "@/types";
+import axios from "axios";
 
 interface AppContextProps {
   fetchUserDetails: () => Promise<void>;
@@ -28,18 +29,17 @@ export const useAppContext = () => {
 };
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
-
   const dispatch = useAppDispatch();
 
   const [cartProductCount, setCartProductCount] = useState(0);
 
   const fetchUserDetails = async () => {
-    const dataResponse = await fetch(BackendApi.current_user.url, {
+    const dataResponse = await axios.get(BackendApi.current_user.url, {
       method: BackendApi.current_user.method,
-      credentials: "include",
+      withCredentials: true,
     });
 
-    const dataApi = await dataResponse.json();
+    const dataApi = await dataResponse.data;
 
     if (dataApi.success) {
       dispatch(setUserDetails(dataApi.data));
@@ -47,12 +47,12 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const fetchUserAddToCart = async () => {
-    const dataResponse = await fetch(BackendApi.addToCartProductCount.url, {
+    const dataResponse = await axios.get(BackendApi.addToCartProductCount.url, {
       method: BackendApi.addToCartProductCount.method,
-      credentials: "include",
+     withCredentials: true,
     });
 
-    const dataApi = await dataResponse.json();
+    const dataApi = await dataResponse.data;
 
     setCartProductCount(dataApi?.data?.count);
   };

@@ -8,6 +8,7 @@ import Header from "@/app/_components/Header";
 import Navbar from "@/app/_components/Navbar";
 import { toast } from "react-toastify";
 import { useAppContext } from "@/context";
+import axios from "axios";
 const LoginPage = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
@@ -33,32 +34,34 @@ const LoginPage = () => {
     });
   };
 
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    const dataResponse = await fetch(BackendApi.signIn.url, {
-      method: BackendApi.signIn.method,
-      credentials: "include",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-
-    const dataApi = await dataResponse.json();
-
-    if (dataApi.success) {
-      toast.success(dataApi.message);
-      router.push("/");
-      fetchUserDetails();
-      // fetchUserAddToCart()
-    }
-
-    if (dataApi.error) {
-      toast.error(dataApi.message);
+  
+    try {
+      const response = await axios.post(BackendApi.signIn.url, {
+        ...data, 
+      }, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      const { data: dataApi } = response;
+  
+      if (dataApi.success) {
+        toast.success(dataApi.message);
+        router.push('/');
+        fetchUserDetails();
+      } else {
+        toast.error(dataApi.message);
+      }
+    } catch (error) {
+      console.error('Error signing in:', error);
+      toast.error('Error signing in. Please try again.');
     }
   };
-
   return (
     <>
       <header className="fixed shadow-md bg-white w-full z-40">

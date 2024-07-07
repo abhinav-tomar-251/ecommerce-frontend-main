@@ -15,7 +15,8 @@ interface ProductData {
   category: string;
   productImage: string[];
   description: string;
-  price: string;
+  price: number;
+  rating: number;
   sellingPrice: string;
 }
 
@@ -34,7 +35,8 @@ const UploadProduct: React.FC<UploadProductProps> = ({
     category: "",
     productImage: [],
     description: "",
-    price: "",
+    price: 0,
+    rating: 0,
     sellingPrice: "",
   });
   const [openFullScreenImage, setOpenFullScreenImage] = useState(false);
@@ -109,7 +111,7 @@ const UploadProduct: React.FC<UploadProductProps> = ({
   };
 
   return (
-    <div className="fixed w-full h-full bg-slate-200 bg-opacity-35 top-10  left-0 right-0 bottom-0 flex justify-center items-center">
+    <div className=" fixed w-full h-full bg-slate-200 bg-opacity-35 top-14  left-0 right-0 bottom-0 flex justify-center items-center">
       <div className="bg-white p-4 rounded w-full max-w-2xl h-full max-h-[80%] overflow-hidden">
         <div className="flex justify-between items-center pb-3">
           <h2 className="font-bold text-lg">Upload Product</h2>
@@ -243,6 +245,20 @@ const UploadProduct: React.FC<UploadProductProps> = ({
             placeholder="Enter selling price"
             value={data.sellingPrice}
             name="sellingPrice"
+            onChange={handleOnChange}
+            className="p-2 bg-slate-100 border rounded"
+            required
+          />
+
+          <label htmlFor="rating" className="mt-3">
+            Rating :
+          </label>
+          <input
+            type="number"
+            id="rating"
+            placeholder="Enter rating"
+            value={data.rating}
+            name="rating"
             onChange={handleOnChange}
             className="p-2 bg-slate-100 border rounded"
             required

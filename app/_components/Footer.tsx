@@ -1,7 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
 import {
   FaArrowUp,
@@ -34,7 +32,7 @@ const Footer = () => {
     });
   };
 
-  // Add event listener when component mounts
+
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => {
@@ -52,15 +50,7 @@ const Footer = () => {
           <FaArrowUp />
         </button>
       )}
-      {/* <div className="bg-black absolute -mt-14 lg:mx-48 mx-0 md:mx-48 lg:px-12 md:px-6 py-6 rounded-lg shadow-md flex lg:flex-row md:flex-col flex-col gap-x-24 ">
-           <p className="font-extrabold text-white text-3xl lg:w-2/3 md:w-full w-full  text-left ">STAY UPTO DATE ABOUT OUR LATEST OFFERS</p>
-           <div className="flex lg:flex-col md:flex-row flex-row lg:w-1/3 md:w-full w-full md:py-2 py-2 gap-2 ">
-              <Input className="bg-white rounded-full shadow-md" type="email" placeholder="Enter your email address"/>
-               <Button className="bg-white text-black rounded-full shadow-md px-8 items-center hover:bg-white" >
-                  Subscribe to newsletter
-               </Button>
-           </div>
-        </div> */}
+     
       <div className="flex sm:flex-row flex-col sm:gap-x-16 justify-between items-start px-20 sm:px-30 sm:pt-16 ">
         <div className="flex flex-col gap-y-8 py-16  w-full sm:w-1/4">
           <h2 className="lg:text-3xl md:text-xl font-extrabold ">

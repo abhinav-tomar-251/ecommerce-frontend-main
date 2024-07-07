@@ -11,6 +11,7 @@ interface AdminProductCardProps {
     productImage: string[];
     description: string;
     price: number;
+    rating: number;
     sellingPrice: number;
   };
   fetchdata: () => void;

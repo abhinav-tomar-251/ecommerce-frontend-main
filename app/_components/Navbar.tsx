@@ -7,7 +7,7 @@ import { GrSearch } from "react-icons/gr";
 import { useRouter } from "next/navigation";
 import { FaShoppingCart } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { User } from "@/types";
+import { Product, User } from "@/types";
 import Image from "next/image";
 import BackendApi from "../common";
 import { toast } from "react-toastify";
@@ -15,6 +15,7 @@ import { setUserDetails } from "@/lib/store/userSlice";
 import ROLE from "../common/role";
 import { useAppContext } from "@/context";
 import { FaRegCircleUser } from "react-icons/fa6";
+import axios from "axios";
 
 const Navbar: React.FC = () => {
   const router = useRouter();
@@ -23,6 +24,7 @@ const Navbar: React.FC = () => {
   const { fetchUserDetails, cartProductCount } = useAppContext();
   const [menuDisplay, setMenuDisplay] = useState(false);
   const [search, setSearch] = useState("");
+  const [suggestions, setSuggestions] = useState<Product[]>([]);
 
   const handleLogout = async () => {
     const fetchData = await fetch(BackendApi.logout_user.url, {
@@ -50,14 +52,35 @@ const Navbar: React.FC = () => {
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setSearch(value);
-
-    if (value) {
-      router.push(`/ProductSearch?q=${value}`);
+  };
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (search.trim() !== "") {
+      router.push(`/ProductSearch?q=${search}`);
     } else {
       router.push("/ProductSearch");
     }
   };
 
+  useEffect(() => {
+    const fetchSuggestions = async (q: string) => {
+      try {
+        const suggestionData = await axios.get(BackendApi.searchProduct.url, {
+          params: { q },
+        });
+        setSuggestions(suggestionData.data.data); 
+      } catch (error) {
+        console.log("Error fetching suggestions:", error);
+        setSuggestions([]);
+      }
+    };
+
+    if (search.length > 1) {
+      fetchSuggestions(search);
+    } else {
+      setSuggestions([]);
+    }
+  }, [search]);
 
   return (
     <nav className="h-16 shadow-md bg-white w-full z-40">
@@ -68,12 +91,52 @@ const Navbar: React.FC = () => {
           </Link>
         </div>
 
-        <div className='hidden lg:flex items-center w-full justify-between max-w-sm border rounded-full focus-within:shadow pl-2 cursor-pointer'>
-          <input type='text' placeholder='search product here...' className='w-full outline-none' onChange={handleSearch} value={search}/>
-          <div className='text-lg min-w-[50px] h-8 bg-gray-600 flex items-center justify-center rounded-r-full text-white'>
+        <form
+          onSubmit={handleSubmit}
+          className="hidden md:flex items-center w-full justify-between max-w-sm border rounded-full focus-within:shadow pl-2 cursor-pointer"
+        >
+          <input
+            type="text"
+            placeholder="Search product here..."
+            className="w-full outline-none"
+            onChange={handleSearch}
+            value={search}
+          />
+          <button
+            type="submit"
+            className="text-lg min-w-[50px] h-8 bg-gray-600 flex items-center justify-center rounded-r-full text-white"
+          >
             <GrSearch />
-          </div>
-        </div>
+          </button>
+
+          {/* Suggestions dropdown */}
+          {suggestions.length > 0 && (
+            <ul className="absolute h-60 top-20   border  overflow-y-scroll  scrollbar-none border-gray-300 rounded shadow-lg bg-white">
+              {suggestions.map((product, index) => (
+                <li
+                  key={product._id}
+                  className="p-2 hover:bg-gray-200 cursor-pointer flex flex-row gap-2"
+                >
+                  <span>
+                    <img
+                      src={product.productImage[0]}
+                      alt={product.category}
+                      className="h-8 w-8 object-scale-down mix-blend-multiply hover:scale-125 transition-all"
+                    />
+                  </span>
+                  <Link
+                    href={{
+                      pathname: `/ProductDetails`,
+                      query: { _id: product._id },
+                    }}
+                  >
+                    {product.productName.slice(0, 32)}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </form>
 
         <div className="flex items-center gap-7">
           <div className="relative flex justify-center">
@@ -109,13 +172,23 @@ const Navbar: React.FC = () => {
                     </Link>
                   )}
                   <Link
-                      href="/Order"
-                      className="whitespace-nowrap hidden md:block hover:bg-slate-100 p-2"
-                      onClick={() => setMenuDisplay((prev) => !prev)}
+                    href="/Order"
+                    className="whitespace-nowrap hidden md:block hover:bg-slate-100 p-2"
+                    onClick={() => setMenuDisplay((prev) => !prev)}
                   >
-                      My Orders
+                    My Orders
+                  </Link>
+                  <Link
+                    href="/Subscribe"
+                    className="whitespace-nowrap hidden md:block hover:bg-slate-100 p-2"
+                    onClick={() => setMenuDisplay((prev) => !prev)}
+                  >
+                    Subscribe
                   </Link>
                 </nav>
+                <p className="text-sm text-gray-700 text-nowrap py-1">
+                  {user.name}
+                </p>
               </div>
             )}
           </div>

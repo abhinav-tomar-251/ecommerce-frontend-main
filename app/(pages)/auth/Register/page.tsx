@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash, FaUserCircle } from "react-icons/fa";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 const Register = () => {
   const router = useRouter();
@@ -49,32 +50,36 @@ const Register = () => {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
 
-    if (data.password === data.confirmPassword) {
-      const dataResponse = await fetch(BackendApi.signUP.url, {
-        method: BackendApi.signUP.method,
+  if (data.password === data.confirmPassword) {
+    try {
+      const response = await axios.post(BackendApi.signUP.url, {
+        ...data, 
+      }, {
         headers: {
-          "content-type": "application/json",
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
       });
 
-      const dataApi = await dataResponse.json();
+      const { data: dataApi } = response;
 
       if (dataApi.success) {
         toast.success(dataApi.message);
-        router.push("/auth/Login");
-      }
-
-      if (dataApi.error) {
+        router.push('/auth/Login');
+      } else {
         toast.error(dataApi.message);
       }
-    } else {
-      toast.error("Please check password and confirm password");
+    } catch (error) {
+      console.error('Error signing up:', error);
+      toast.error('Error signing up. Please try again.');
     }
-  };
+  } else {
+    toast.error('Please check password and confirm password');
+  }
+};
 
   return (
     <>

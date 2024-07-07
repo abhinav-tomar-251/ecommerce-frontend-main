@@ -1,13 +1,16 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import BackendApi from "@/app/common";
 import moment from "moment";
 import displayINRCurrency from "@/actions/displayCurrency";
 import Header from "@/app/_components/Header";
 import Navbar from "@/app/_components/Navbar";
 import Image from "next/image";
-
+import { BounceLoader } from "react-spinners";
+import Link from "next/link";
+import NextBreadcrumb from "@/app/_components/breadNavigation";
+import { FaAngleRight } from "react-icons/fa6";
+import axios from "axios";
 interface ProductDetails {
   productId: string;
   name: string;
@@ -23,37 +26,31 @@ interface PaymentDetails {
 
 interface ShippingOptions {
   shipping_rate: string;
-  shipping_amount: string;
+  shipping_amount: number;
 }
 
 interface Order {
   userId: string;
   createdAt: string;
+  receipt_url: string;
   productDetails: ProductDetails[];
   paymentDetails: PaymentDetails;
   shipping_options: ShippingOptions[];
-  totalAmount: string;
+  totalAmount: number;
 }
 
-const OrderPage: React.FC = () => {
+const OrderPage = () => {
   const [data, setData] = useState<Order[]>([]);
 
   const fetchOrderDetails = async () => {
-    try {
-      const response = await axios.get<{ data: Order[] }>(BackendApi.getOrder.url, {
-        withCredentials: true,
-      });
-      setData(response.data.data);
-      console.log("order list", response.data);
-    } catch (error) {
-      let errorMessage = "An unknown error occurred";
-      if (axios.isAxiosError(error)) {
-        errorMessage = error.response?.data.message || error.message;
-      } else if (error instanceof Error) {
-        errorMessage = error.message;
-      }
-      console.error("Error fetching order details:", errorMessage);
-    }
+    const response = await axios.get(BackendApi.getOrder.url, {
+      method: BackendApi.getOrder.method,
+      withCredentials: true,
+    });
+
+    const responseData = await response.data;
+
+    setData(responseData.data);
   };
 
   useEffect(() => {
@@ -62,16 +59,19 @@ const OrderPage: React.FC = () => {
 
   return (
     <>
-      <div className="h-[calc(100vh-190px)] md:flex hidden overflow-y-hidden scrollbar-none">
+      <div className=" md:flex hidden overflow-y-scroll scrollbar-none">
         <header className="fixed shadow-md bg-white w-full z-40">
           <Header />
           <Navbar />
         </header>
-        <main className="w-full h-full pt-28">
+        <main className="w-full min-h-screen pt-28 mx-20">
           {!data[0] && (
-            <p className="text-center text-4xl text-gray-700">
-              No Order available
-            </p>
+            <div className="flex flex-col justify-center items-center">
+              <BounceLoader size={150} className="text-gray-800" />
+              <p className="text-center text-4xl text-gray-700">
+                No Order available
+              </p>
+            </div>
           )}
           <div className="p-4 w-full">
             {data.map((item, index) => (
@@ -79,19 +79,19 @@ const OrderPage: React.FC = () => {
                 <p className="font-medium text-lg">
                   {moment(item.createdAt).format("LL")}
                 </p>
-                <div className="border rounded p-2">
-                  <div className="flex flex-col lg:flex-row justify-between">
-                    <div className="grid gap-1">
+                <div className="border rounded p-2 bg-slate-100">
+                  <div className="flex flex-col lg:flex-row justify-between px-6">
+                    <div className="grid gap-1 ">
                       {item.productDetails.map((product, idx) => (
                         <div
                           key={product.productId + idx}
-                          className="flex gap-3 bg-slate-100"
+                          className="flex gap-3 "
                         >
                           <Image
                             src={product.image[0]}
                             width={112}
                             height={112}
-                            className=" bg-slate-200 object-scale-down p-2"
+                            className="object-scale-down mix-blend-multiply p-2"  
                             alt={product.name}
                           />
                           <div>
@@ -99,12 +99,20 @@ const OrderPage: React.FC = () => {
                               {product.name}
                             </div>
                             <div className="flex items-center gap-5 mt-1">
-                              <div className="text-lg text-red-500">
+                              <div className="text-lg text-gray-500">
                                 {displayINRCurrency(product.price)}
                               </div>
                               <p>Quantity : {product.quantity}</p>
                             </div>
                           </div>
+                          <Link
+                            href={item.receipt_url}
+                            className="text-gray-700"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Show Receipt
+                          </Link>
                         </div>
                       ))}
                     </div>
@@ -118,8 +126,7 @@ const OrderPage: React.FC = () => {
                           {item.paymentDetails.payment_method_type[0]}
                         </p>
                         <p className="ml-1">
-                          Payment Status :{" "}
-                          {item.paymentDetails.payment_status}
+                          Payment Status : {item.paymentDetails.payment_status}
                         </p>
                       </div>
                       <div>
@@ -131,14 +138,15 @@ const OrderPage: React.FC = () => {
                             key={shipping.shipping_rate + idx}
                             className="ml-1"
                           >
-                            Shipping Amount : {shipping.shipping_amount}
+                            Shipping Amount :{" "}
+                            {displayINRCurrency(shipping.shipping_amount)}
                           </div>
                         ))}
                       </div>
                     </div>
                   </div>
                   <div className="font-semibold ml-auto w-fit lg:text-lg">
-                    Total Amount : {item.totalAmount}
+                    Total Amount : {displayINRCurrency(item.totalAmount)}
                   </div>
                 </div>
               </div>

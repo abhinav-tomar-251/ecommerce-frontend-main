@@ -67,13 +67,13 @@ const VerticalCardProduct: React.FC<VerticalCardProductProps> = ({
         ref={scrollElement}
       >
         <button
-          className=" p-1 absolute left-0 text-lg hidden md:block"
+          className=" p-1 absolute -left-2 text-lg hidden md:block"
           onClick={scrollLeft}
         >
           <SlArrowLeft />
         </button>
         <button
-          className=" p-1 absolute right-0 text-lg hidden md:block"
+          className=" p-1 absolute right-2 text-lg hidden md:block"
           onClick={scrollRight}
         >
           <SlArrowRight />
