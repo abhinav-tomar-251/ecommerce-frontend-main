@@ -18,10 +18,21 @@ import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
 import { BounceLoader } from "react-spinners";
 import BackendApi from "@/app/common";
+import { useRouter } from "next/navigation";
 
 const CartPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const { data, loading } = useSelector((state: RootState) => state.cart);
+  const user = useSelector((state: RootState) => state.user.user);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!user) {
+      router.push("/login");
+    } else {
+      dispatch(fetchCart());
+    }
+  }, [dispatch, user, router]);
 
   useEffect(() => {
     dispatch(fetchCart());
@@ -125,6 +136,14 @@ const CartPage: React.FC = () => {
 //     console.error("Error while making payment request:", error);
 //   }
 // };
+
+
+  if (!user) {
+    return  <div className="flex flex-col justify-center items-center h-screen">
+              <BounceLoader size={50} className="text-gray-800" loading />
+              <p className="bg-white py-5">Cart is Empty</p>
+            </div>
+  }
 
   return (
     <>
