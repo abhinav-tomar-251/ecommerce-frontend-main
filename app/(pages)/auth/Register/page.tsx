@@ -58,10 +58,6 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       const response = await axios.post(BackendApi.signUP.url, {
         ...data, 
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
       });
 
       const { data: dataApi } = response;

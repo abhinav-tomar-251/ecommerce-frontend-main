@@ -12,13 +12,13 @@ import { Product } from "@/types";
 interface CategoryWiseProductDisplayProps {
   category: string;
   heading: string;
-  excludeProductId?: string;  // Added excludeProductId prop
+  excludeProductId?: string;
 }
 
 const CategoryWiseProductDisplay: React.FC<CategoryWiseProductDisplayProps> = ({
   category,
   heading,
-  excludeProductId,  // Added excludeProductId prop
+  excludeProductId,
 }) => {
   const [data, setData] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -39,7 +39,6 @@ const CategoryWiseProductDisplay: React.FC<CategoryWiseProductDisplayProps> = ({
     const categoryProduct = await fetchCategoryWiseProduct(category);
     setLoading(false);
 
-    // Filter out the product with the excludeProductId
     const filteredProducts = categoryProduct?.data.filter(
       (product: Product) => product._id !== excludeProductId
     );
@@ -49,7 +48,7 @@ const CategoryWiseProductDisplay: React.FC<CategoryWiseProductDisplayProps> = ({
 
   useEffect(() => {
     fetchData();
-  }, [category, excludeProductId]);  // Added excludeProductId dependency
+  }, [category, excludeProductId]);
 
   return (
     <div className="container mx-auto px-4 my-6 relative">

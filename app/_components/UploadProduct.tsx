@@ -8,6 +8,7 @@ import DisplayImage from "./DisplayImage";
 import { MdDelete } from "react-icons/md";
 import BackendApi from "../common";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 interface ProductData {
   productName: string;
@@ -84,16 +85,14 @@ const UploadProduct: React.FC<UploadProductProps> = ({
     e.preventDefault();
 
     try {
-      const response = await fetch(BackendApi.uploadProduct.url, {
+      const response = await axios({
+        url: BackendApi.uploadProduct.url,
         method: BackendApi.uploadProduct.method,
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+        withCredentials: true,
+        data: data,
       });
 
-      const responseData = await response.json();
+      const responseData = response.data;
 
       if (responseData.success) {
         toast.success(responseData.message);

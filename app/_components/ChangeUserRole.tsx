@@ -4,6 +4,7 @@ import { IoMdClose } from "react-icons/io";
 import ROLE from "../common/role";
 import BackendApi from "../common";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 interface ChangeUserRoleProps {
   name: string;
@@ -30,19 +31,17 @@ const ChangeUserRole: React.FC<ChangeUserRoleProps> = ({
 
   const updateUserRole = async () => {
     try {
-      const fetchResponse = await fetch(BackendApi.updateUser.url, {
+      const response = await axios({
+        url: BackendApi.updateUser.url,
         method: BackendApi.updateUser.method,
-        credentials: "include",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
+        withCredentials: true,
+        data: {
           userId: userId,
           role: userRole,
-        }),
+        },
       });
 
-      const responseData = await fetchResponse.json();
+      const responseData = response.data;
 
       if (responseData.success) {
         toast.success(responseData.message);

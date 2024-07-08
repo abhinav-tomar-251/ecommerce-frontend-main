@@ -43,9 +43,6 @@ const LoginPage = () => {
         ...data, 
       }, {
         withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-        },
       });
   
       const { data: dataApi } = response;

@@ -4,12 +4,10 @@ import React, {
   useContext,
   useState,
   useEffect,
-  useCallback,
 } from "react";
 import BackendApi from "@/app/common";
 import { setUserDetails } from "../lib/store/userSlice";
 import { useAppDispatch } from "@/lib/hooks";
-import { User } from "@/types";
 import axios from "axios";
 
 interface AppContextProps {

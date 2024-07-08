@@ -1,5 +1,4 @@
-
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import BackendApi from '@/app/common';
 
@@ -30,9 +29,6 @@ export const fetchCart = createAsyncThunk('cart/fetchCart', async () => {
   const response = await axios.get(BackendApi.addToCartProductView.url, {
     method: BackendApi.addToCartProductView.method,
     withCredentials: true,
-    headers: {
-      'content-type': 'application/json',
-    },
   });
   return response.data.data;
 });
@@ -40,9 +36,6 @@ export const fetchCart = createAsyncThunk('cart/fetchCart', async () => {
 export const updateCart = createAsyncThunk('cart/updateCart', async ({ id, quantity }: { id: string, quantity: number }) => {
   await axios.post(BackendApi.updateCartProduct.url, { _id: id, quantity }, {
     withCredentials: true,
-    headers: {
-      'content-type': 'application/json',
-    },
   });
   return { id, quantity };
 });
@@ -50,9 +43,6 @@ export const updateCart = createAsyncThunk('cart/updateCart', async ({ id, quant
 export const deleteCartProduct = createAsyncThunk('cart/deleteCartProduct', async (id: string) => {
   await axios.post(BackendApi.deleteCartProduct.url, { _id: id }, {
     withCredentials: true,
-    headers: {
-      'content-type': 'application/json',
-    },
   });
   return id;
 });

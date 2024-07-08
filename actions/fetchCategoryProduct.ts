@@ -12,11 +12,6 @@ const fetchCategoryWiseProduct = async (category: string): Promise<CategoryWiseP
     const response = await axios.post(
       BackendApi.categoryWiseProduct.url,
       { category },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        }
-      }
     );
 
     return response.data;
@@ -33,7 +28,6 @@ const fetchCategoryWiseProduct = async (category: string): Promise<CategoryWiseP
     } else if (error instanceof Error) {
       errorMessage = error.message;
     }
-
     console.error("Error fetching category wise products:", errorMessage);
     return { success: false, data: null, message: errorMessage };
   }

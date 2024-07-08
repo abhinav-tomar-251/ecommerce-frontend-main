@@ -27,12 +27,12 @@ const Navbar: React.FC = () => {
   const [suggestions, setSuggestions] = useState<Product[]>([]);
 
   const handleLogout = async () => {
-    const fetchData = await fetch(BackendApi.logout_user.url, {
+    const fetchData = await axios.get(BackendApi.logout_user.url, {
       method: BackendApi.logout_user.method,
-      credentials: "include",
+      withCredentials: true,
     });
 
-    const data = await fetchData.json();
+    const data = await fetchData.data;
 
     if (data.success) {
       toast.success(data.message);

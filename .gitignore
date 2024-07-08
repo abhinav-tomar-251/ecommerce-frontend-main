@@ -36,6 +36,6 @@ yarn-error.log*
 next-env.d.ts
 
 # Ignore app/assest directory
-# /app/assest/
+/app/assest/
 
 

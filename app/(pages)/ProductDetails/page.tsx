@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import BackendApi from "@/app/common";
-import { FaStar, FaStarHalf } from "react-icons/fa";
+import { FaRegStar, FaStar, FaStarHalf, FaStarHalfAlt } from "react-icons/fa";
 import displayINRCurrency from "@/actions/displayCurrency";
 import CategroyWiseProductDisplay from "@/app/_components/CategoryWiseProducts";
 import addToCart from "@/actions/addToCart";
@@ -51,11 +51,9 @@ const ProductDetails: React.FC = () => {
   const fetchProductDetails = async (_id: string) => {
     setLoading(true);
     try {
-      const response = await axios.get(`${BackendApi.productDetails.url}/${_id}`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.get(
+        `${BackendApi.productDetails.url}/${_id}`,
+      );
 
       if (response.status !== 200) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -123,17 +121,20 @@ const ProductDetails: React.FC = () => {
     }
   };
 
-   const renderStarRating = (rating: number) => {
+  const renderStarRating = (rating: number) => {
     const stars = [];
+    const totalStars = 5;
     const fullStars = Math.floor(rating);
-    const hasHalfStar = rating - fullStars >= 0.1;
+    const hasHalfStar = rating - fullStars ;
 
-    for (let i = 0; i < fullStars; i++) {
-      stars.push(<FaStar key={i} />);
-    }
-
-    if (hasHalfStar) {
-      stars.push(<FaStarHalf key="half-star" />);
+    for (let i = 1; i <= totalStars; i++) {
+      if (i <= fullStars) {
+        stars.push(<FaStar key={`star-${i}`} />);
+      } else if (i === Math.ceil(rating) && hasHalfStar) {
+        stars.push(<FaStarHalfAlt key={`star-${i}`} />);
+      } else {
+        stars.push(<FaRegStar key={`star-${i}`} />);
+      }
     }
 
     return stars;
@@ -160,7 +161,7 @@ const ProductDetails: React.FC = () => {
 
                 {/* Product Zoom */}
                 {zoomImage && (
-                  <div className="hidden lg:block absolute min-w-[400px] overflow-hidden min-h-[300px] bg-slate-200 p-1 -right-[420px] top-5 rounded-md">
+                  <div className="hidden md:block absolute min-w-[400px] overflow-hidden min-h-[300px] bg-slate-200 p-1 -right-[420px] top-5 rounded-md">
                     <div
                       className="w-full h-full min-h-[300px] min-w-[400px] mix-blend-multiply scale-150"
                       style={{
