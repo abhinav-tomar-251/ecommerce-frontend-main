@@ -1,7 +1,6 @@
 "use client";
 import Header from "@/app/_components/Header";
 import Navbar from "@/app/_components/Navbar";
-import BackendApi from "@/app/common";
 import imageTobase64 from "@/actions/imageTobase64";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,7 +8,7 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash, FaUserCircle } from "react-icons/fa";
 import { toast } from "react-toastify";
-import axios from "axios";
+import { register } from "@/actions/authService";
 
 const Register = () => {
   const router = useRouter();
@@ -57,17 +56,12 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 
   if (data.password === data.confirmPassword) {
     try {
-      const response = await axios.post(BackendApi.signUP.url, {
-        ...data, 
-      });
-
-      const { data: dataApi } = response;
-
-      if (dataApi.success) {
-        toast.success(dataApi.message);
+      const response = await register(data);
+      if (response.success) {
+        toast.success(response.message);
         router.push('/auth/Login');
       } else {
-        toast.error(dataApi.message);
+        toast.error(response.message);
       }
     } catch (error) {
       console.error('Error signing up:', error);

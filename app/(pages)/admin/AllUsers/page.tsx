@@ -17,6 +17,7 @@ import ROLE from "@/app/common/role";
 import { User } from "@/types";
 import { BounceLoader } from "react-spinners";
 import axios from 'axios';
+import { fetchAllUsers } from "@/actions/allUsers";
 
 const AllUsers: React.FC = () => {
   const router = useRouter();
@@ -31,34 +32,19 @@ const AllUsers: React.FC = () => {
     email: "",
     role: "",
     password: "",
+    subscribed_plan: "",
+    active_plan: false,
     createdAt: new Date(),
     updatedAt: new Date(),
   });
 
-  const fetchAllUsers = async () => {
-    try {
-      const fetchData = await axios.get(BackendApi.allUser.url, {
-        method: BackendApi.allUser.method,
-        withCredentials: true,
-      });
-
-      const dataResponse = await fetchData.data;
-
-      if (dataResponse.success) {
-        setAllUsers(dataResponse.data);
-      }
-
-      if (dataResponse.error) {
-        toast.error(dataResponse.message);
-      }
-    } catch (error) {
-      console.error("Error fetching all users:", error);
-      toast.error("Failed to fetch users. Please try again.");
-    }
-  };
-
   useEffect(() => {
-    fetchAllUsers();
+    const fetchData = async () => {
+      const users = await fetchAllUsers();
+      setAllUsers(users);
+    };
+
+    fetchData();
   }, []);
 
   useEffect(() => {

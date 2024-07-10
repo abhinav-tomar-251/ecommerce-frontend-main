@@ -15,7 +15,7 @@ import Header from "@/app/_components/Header";
 import Navbar from "@/app/_components/Navbar";
 import Footer from "@/app/_components/Footer";
 import { loadStripe } from "@stripe/stripe-js";
-import axios from "axios";
+// import axios from "axios";
 import { BounceLoader } from "react-spinners";
 import BackendApi from "@/app/common";
 import { useRouter } from "next/navigation";

@@ -16,6 +16,8 @@ import ROLE from "../common/role";
 import { useAppContext } from "@/context";
 import { FaRegCircleUser } from "react-icons/fa6";
 import axios from "axios";
+import { logout } from "@/actions/authService";
+import { searchProduct } from "@/actions/searchProduct";
 
 const Navbar: React.FC = () => {
   const router = useRouter();
@@ -27,21 +29,17 @@ const Navbar: React.FC = () => {
   const [suggestions, setSuggestions] = useState<Product[]>([]);
 
   const handleLogout = async () => {
-    const fetchData = await axios.get(BackendApi.logout_user.url, {
-      method: BackendApi.logout_user.method,
-      withCredentials: true,
-    });
-
-    const data = await fetchData.data;
-
-    if (data.success) {
-      toast.success(data.message);
-      dispatch(setUserDetails(null));
-      router.push("/");
-    }
-
-    if (data.error) {
-      toast.error(data.message);
+    try {
+      const data = await logout();
+      if (data.success) {
+        toast.success(data.message);
+        dispatch(setUserDetails(null));
+        router.push("/");
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error('Error logging out. Please try again.');
     }
   };
 
@@ -49,10 +47,12 @@ const Navbar: React.FC = () => {
     fetchUserDetails();
   }, [fetchUserDetails]);
 
+
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setSearch(value);
   };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (search.trim() !== "") {
@@ -65,10 +65,8 @@ const Navbar: React.FC = () => {
   useEffect(() => {
     const fetchSuggestions = async (q: string) => {
       try {
-        const suggestionData = await axios.get(BackendApi.searchProduct.url, {
-          params: { q },
-        });
-        setSuggestions(suggestionData.data.data); 
+        const suggestionData = await searchProduct(q);
+        setSuggestions(suggestionData);
       } catch (error) {
         console.log("Error fetching suggestions:", error);
         setSuggestions([]);
@@ -111,7 +109,7 @@ const Navbar: React.FC = () => {
 
           {/* Suggestions dropdown */}
           {suggestions.length > 0 && (
-            <ul className="absolute h-60 top-20   border  overflow-y-scroll  scrollbar-none border-gray-300 rounded shadow-lg bg-white">
+            <ul className="absolute h-60 top-20  border  overflow-y-scroll  scrollbar-none border-gray-300 rounded shadow-lg bg-white">
               {suggestions.map((product, index) => (
                 <li
                   key={product._id}
@@ -165,7 +163,7 @@ const Navbar: React.FC = () => {
                   {user?.role === ROLE.ADMIN && (
                     <Link
                       href="/admin/AdminPanel"
-                      className="whitespace-nowrap hidden md:block hover:bg-slate-100 p-2"
+                      className="whitespace-nowrap hidden sm:block hover:bg-slate-100 p-2"
                       onClick={() => setMenuDisplay((prev) => !prev)}
                     >
                       Admin Panel
@@ -173,7 +171,7 @@ const Navbar: React.FC = () => {
                   )}
                   <Link
                     href="/Order"
-                    className="whitespace-nowrap hidden md:block hover:bg-slate-100 p-2"
+                    className="whitespace-nowrap hidden sm:block hover:bg-slate-100 p-2"
                     onClick={() => setMenuDisplay((prev) => !prev)}
                   >
                     My Orders
@@ -185,7 +183,7 @@ const Navbar: React.FC = () => {
                   ) : (
                     <Link
                       href="/Subscribe"
-                      className="whitespace-nowrap hidden md:block hover:bg-slate-100 p-2"
+                      className="whitespace-nowrap hidden sm:block hover:bg-slate-100 p-2"
                       onClick={() => setMenuDisplay((prev) => !prev)}
                     >
                       Subscribe

@@ -7,7 +7,7 @@ import VerticalCard from "@/app/_components/VerticalCard";
 import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
 import Header from "@/app/_components/Header";
-import searchProduct from "@/actions/searchProduct";
+import {searchProduct} from "@/actions/searchProduct";
 
 const ProductSearch: React.FC = () => {
 
@@ -15,16 +15,28 @@ const ProductSearch: React.FC = () => {
   const q = searchParams.get("q");
   const [data, setData] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const fetchData = async () => {
-    setLoading(true);
-    const searchedProduct = await searchProduct();
-    setData(searchedProduct)
-  }
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
 
-  useEffect(()=> {
-    fetchData()
-  },[])
+      try {
+        const searchedProduct = await searchProduct(q || "");
+        setData(searchedProduct);
+      } catch (error) {
+        console.error("Error fetching searched products:", error);
+        setError("Error fetching searched products. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (q) {
+      fetchData();
+    }
+  }, [q]);
 
   return (
     <>

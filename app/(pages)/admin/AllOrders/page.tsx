@@ -15,6 +15,7 @@ import Navbar from "@/app/_components/Navbar";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { BounceLoader } from "react-spinners";
 import axios from "axios";
+import { fetchOrderDetails } from "@/actions/alladminOrders";
 
 interface ProductDetails {
   productId: string;
@@ -61,18 +62,14 @@ const AllOrder: React.FC = () => {
 
   const [data, setData] = useState<Order[]>([]);
 
-  const fetchOrderDetails = async () => {
-    const response = await axios.get(BackendApi.allOrder.url, {
-      method: BackendApi.allOrder.method,
-      withCredentials: true,
-    });
-
-    const responseData = await response.data;
-    setData(responseData.data);
-  };
-
+  
   useEffect(() => {
-    fetchOrderDetails();
+    const fetchData = async () => {
+      const orders = await fetchOrderDetails();
+      setData(orders);
+    };
+
+    fetchData();
   }, []);
 
   return (

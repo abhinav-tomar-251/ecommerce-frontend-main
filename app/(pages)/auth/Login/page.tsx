@@ -8,7 +8,8 @@ import Header from "@/app/_components/Header";
 import Navbar from "@/app/_components/Navbar";
 import { toast } from "react-toastify";
 import { useAppContext } from "@/context";
-import axios from "axios";
+import { login } from "@/actions/authService";
+
 const LoginPage = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
@@ -39,20 +40,13 @@ const LoginPage = () => {
     e.preventDefault();
   
     try {
-      const response = await axios.post(BackendApi.signIn.url, {
-        ...data, 
-      }, {
-        withCredentials: true,
-      });
-  
-      const { data: dataApi } = response;
-  
-      if (dataApi.success) {
-        toast.success(dataApi.message);
+      const response = await login(data);
+      if (response.success) {
+        toast.success(response.message);
         router.push('/');
         fetchUserDetails();
       } else {
-        toast.error(dataApi.message);
+        toast.error(response.message);
       }
     } catch (error) {
       console.error('Error signing in:', error);

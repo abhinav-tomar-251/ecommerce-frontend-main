@@ -11,6 +11,7 @@ import Link from "next/link";
 import NextBreadcrumb from "@/app/_components/breadNavigation";
 import { FaAngleRight } from "react-icons/fa6";
 import axios from "axios";
+import { fetchUserOrderDetails } from "@/actions/userOrder";
 interface ProductDetails {
   productId: string;
   name: string;
@@ -42,19 +43,13 @@ interface Order {
 const OrderPage = () => {
   const [data, setData] = useState<Order[]>([]);
 
-  const fetchOrderDetails = async () => {
-    const response = await axios(BackendApi.getOrder.url, {
-      method: BackendApi.getOrder.method,
-      withCredentials: true,
-    });
-
-    const responseData = await response.data;
-
-    setData(responseData.data);
-  };
-
   useEffect(() => {
-    fetchOrderDetails();
+    const fetchData = async () => {
+      const orders = await fetchUserOrderDetails();
+      setData(orders);
+    };
+
+    fetchData();
   }, []);
 
   return (

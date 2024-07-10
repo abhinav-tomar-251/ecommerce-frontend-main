@@ -1,3 +1,5 @@
+import { resetPassword } from "@/actions/authService";
+
 const backendDomain = process.env.NEXT_PUBLIC_BACKEND_DOMAIN;
 const BackendApi = {
     signUP : {
@@ -6,6 +8,14 @@ const BackendApi = {
     },
     signIn : {
         url : `${backendDomain}/api/signin`,
+        method : "post"
+    },
+    forgotPassword : {
+        url : `${backendDomain}/api/forgot-password`,
+        method : "post"
+    },
+    resetPassword : {
+        url : `${backendDomain}/api/reset-token`,
         method : "post"
     },
     current_user : {

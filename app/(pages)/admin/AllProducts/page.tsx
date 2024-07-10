@@ -15,6 +15,7 @@ import ROLE from "@/app/common/role";
 import { User } from "@/types";
 import { BounceLoader } from "react-spinners";
 import axios from 'axios';
+import { fetchAdminAllProduct } from "@/actions/adminAllProducts";
 
 
 const AllProducts = () => {
@@ -33,15 +34,13 @@ const AllProducts = () => {
   const [openUploadProduct, setOpenUploadProduct] = useState(false);
   const [allProduct, setAllProduct] = useState([]);
 
-  const fetchAllProduct = async () => {
-    const response = await axios.get(BackendApi.allProduct.url);
-    const dataResponse = await response.data;
-
-    setAllProduct(dataResponse?.data || []);
-  };
-
   useEffect(() => {
-    fetchAllProduct();
+    const fetchData = async () => {
+      const products = await fetchAdminAllProduct();
+      setAllProduct(products);
+    };
+
+    fetchData();
   }, []);
 
   return (
@@ -115,7 +114,7 @@ const AllProducts = () => {
                     <AdminProductCard
                       data={product}
                       key={index + "allProduct"}
-                      fetchdata={fetchAllProduct}
+                      fetchdata={fetchAdminAllProduct}
                     />
                   );
                 })}
@@ -125,7 +124,7 @@ const AllProducts = () => {
               {openUploadProduct && (
                 <UploadProduct
                   onClose={() => setOpenUploadProduct(false)}
-                  fetchData={fetchAllProduct}
+                  fetchData={fetchAdminAllProduct}
                 />
               )}
             </div>

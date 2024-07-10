@@ -5,7 +5,6 @@ import Navbar from "@/app/_components/Navbar";
 import { Product } from "@/types";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import CategoryWiseProductDisplay from "@/app/_components/CategoryWiseProducts";
 import fetchCategoryWiseProduct from "@/actions/fetchCategoryProduct";
 import addToCart from "@/actions/addToCart";
 import { useAppContext } from "@/context";
