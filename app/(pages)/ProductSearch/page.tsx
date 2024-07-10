@@ -2,13 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import axios from "axios";
-import BackendApi from "@/app/common";
 import { Product } from "@/types";
 import VerticalCard from "@/app/_components/VerticalCard";
 import Footer from "@/app/_components/Footer";
 import Navbar from "@/app/_components/Navbar";
 import Header from "@/app/_components/Header";
+import searchProduct from "@/actions/searchProduct";
 
 const ProductSearch: React.FC = () => {
 
@@ -17,24 +16,15 @@ const ProductSearch: React.FC = () => {
   const [data, setData] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchProduct = async () => {
-    if (!q) return;
-    try {
-      setLoading(true);
-      const response = await axios.get(`${BackendApi.searchProduct.url}`, {
-        params: { q },
-      });
-      setData(response.data.data);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching products:", error);
-      setLoading(false);
-    }
-  };
+  const fetchData = async () => {
+    setLoading(true);
+    const searchedProduct = await searchProduct();
+    setData(searchedProduct)
+  }
 
-  useEffect(() => {
-    fetchProduct();
-  }, [q]);
+  useEffect(()=> {
+    fetchData()
+  },[])
 
   return (
     <>

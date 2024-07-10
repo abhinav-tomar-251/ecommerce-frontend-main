@@ -178,16 +178,22 @@ const Navbar: React.FC = () => {
                   >
                     My Orders
                   </Link>
-                  <Link
-                    href="/Subscribe"
-                    className="whitespace-nowrap hidden md:block hover:bg-slate-100 p-2"
-                    onClick={() => setMenuDisplay((prev) => !prev)}
-                  >
-                    Subscribe
-                  </Link>
+                  {user && user.active_plan === true ? (
+                    <p className="text-sm text-gray-700 text-nowrap py-1">
+                      Subscribed
+                    </p>
+                  ) : (
+                    <Link
+                      href="/Subscribe"
+                      className="whitespace-nowrap hidden md:block hover:bg-slate-100 p-2"
+                      onClick={() => setMenuDisplay((prev) => !prev)}
+                    >
+                      Subscribe
+                    </Link>
+                  )}
                 </nav>
                 <p className="text-sm text-gray-700 text-nowrap py-1">
-                  {user.name}
+                  {user?.name}
                 </p>
               </div>
             )}

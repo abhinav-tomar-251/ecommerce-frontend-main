@@ -1,6 +1,10 @@
+'use client'
 import Header from "@/app/_components/Header";
 import Navbar from "@/app/_components/Navbar";
+import { useAppDispatch } from "@/lib/hooks";
+import { RootState } from "@/lib/store/store";
 import Script from "next/script";
+import { useSelector } from "react-redux";
 
 declare global {
   namespace JSX {
@@ -14,6 +18,14 @@ declare global {
 }
 
 const Subscribe = () => {
+  const dispatch = useAppDispatch();
+  const user = useSelector((state: RootState) => state.user.user);
+
+  
+  if (!user) {
+    return null; 
+  }
+
   return (
     <>
       <header className="fixed shadow-md bg-white w-full z-40">
@@ -29,10 +41,9 @@ const Subscribe = () => {
         <stripe-pricing-table
           pricing-table-id="prctbl_1PYitaSAko7jb74qDYq2bmk2"
           publishable-key="pk_test_51MwfthSAko7jb74qBqp0nLAr5MPlEB8t2IY4vWa87xkvPtqm6U1KxFPLP4mTpWFIbECSInfkr6zQtTWJiKe2Dc8l00QHNfLHMb"
-          client-reference-id="STRIPE_CLIENT_REFERENCE_ID"
-          customer-email="{{CUSTOMER_EMAIL}}"
-          // customer-session-client-secret="{{CLIENT_SECRET}}"
-        ></stripe-pricing-table>
+          // client-reference-id={process.env.STRIPE_CLIENT_REFERENCE_ID}
+          customer-email={user.email}
+        />
       </main>
     </>
   );

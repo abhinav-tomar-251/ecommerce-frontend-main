@@ -6,6 +6,8 @@ export interface User {
     password: string;
     profilePic?: string;
     role: string;
+    subscribed_plan: string;
+    active_plan: boolean;
     createdAt: Date;
     updatedAt: Date;
 }

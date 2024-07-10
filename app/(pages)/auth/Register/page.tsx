@@ -22,6 +22,7 @@ const Register = () => {
     name: "",
     confirmPassword: "",
     profilePic: "",
+    subscribed_plan:"",
   });
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {

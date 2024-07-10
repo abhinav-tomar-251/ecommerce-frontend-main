@@ -52,6 +52,7 @@ const CartPage: React.FC = () => {
     0
   );
 
+  // Stripe Payment Handle
   const handlePayment = async () => {
     const stripePublicKey = process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY;
     if (!stripePublicKey) {
@@ -90,59 +91,57 @@ const CartPage: React.FC = () => {
     }
   };
 
-  // Using Axios 
+  // Using Axios
 
-// const handlePayment = async () => {
-//   const stripePublicKey = process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY;
-//   if (!stripePublicKey) {
-//     console.error("Stripe public key is undefined.");
-//     return;
-//   }
+  // const handlePayment = async () => {
+  //   const stripePublicKey = process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY;
+  //   if (!stripePublicKey) {
+  //     console.error("Stripe public key is undefined.");
+  //     return;
+  //   }
 
-//   const stripe = await loadStripe(stripePublicKey);
+  //   const stripe = await loadStripe(stripePublicKey);
 
-//   if (!stripe) {
-//     console.error("Failed to initialize Stripe.");
-//     return;
-//   }
+  //   if (!stripe) {
+  //     console.error("Failed to initialize Stripe.");
+  //     return;
+  //   }
 
-//   try {
-//     const response = await axios({
-//       method: BackendApi.payment.method, 
-//       url: BackendApi.payment.url,
-//       withCredentials: true, 
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       data: {
-//         cartItems: data, 
-//       },
-//     });
+  //   try {
+  //     const response = await axios({
+  //       method: BackendApi.payment.method,
+  //       url: BackendApi.payment.url,
+  //       withCredentials: true,
+  //       data: {
+  //         cartItems: data,
+  //       },
+  //     });
 
-//     const responseData = response.data;
+  //     const responseData = response.data;
 
-//     if (responseData?.id) {
-//       const { error } = await stripe.redirectToCheckout({
-//         sessionId: responseData.id,
-//       });
+  //     if (responseData?.id) {
+  //       const { error } = await stripe.redirectToCheckout({
+  //         sessionId: responseData.id,
+  //       });
 
-//       if (error) {
-//         console.error("Failed to redirect to checkout:", error);
-//       }
-//     } else {
-//       console.error("No session ID returned from backend");
-//     }
-//   } catch (error) {
-//     console.error("Error while making payment request:", error);
-//   }
-// };
-
+  //       if (error) {
+  //         console.error("Failed to redirect to checkout:", error);
+  //       }
+  //     } else {
+  //       console.error("No session ID returned from backend");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error while making payment request:", error);
+  //   }
+  // };
 
   if (!user) {
-    return  <div className="flex flex-col justify-center items-center h-screen">
-              <BounceLoader size={50} className="text-gray-800" loading />
-              <p className="bg-white py-5">Cart is Empty</p>
-            </div>
+    return (
+      <div className="flex flex-col justify-center items-center h-screen">
+        <BounceLoader size={50} className="text-gray-800" loading />
+        <p className="bg-white py-5">Cart is Empty</p>
+      </div>
+    );
   }
 
   return (

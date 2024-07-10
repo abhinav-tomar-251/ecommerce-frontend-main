@@ -8,6 +8,7 @@ import DisplayImage from "./DisplayImage";
 import { MdDelete } from "react-icons/md";
 import BackendApi from "../common";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 interface ProductData {
   productName: string;
@@ -78,16 +79,14 @@ const AdminEditProduct: React.FC<AdminEditProductProps> = ({
     e.preventDefault();
 
     try {
-      const response = await fetch(BackendApi.updateProduct.url, {
+      const response = await axios({
+        url: BackendApi.updateProduct.url,
         method: BackendApi.updateProduct.method,
-        credentials: "include",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify(data),
+        withCredentials: true,
+        data: data,
       });
 
-      const responseData = await response.json();
+      const responseData = response.data;
 
       if (responseData.success) {
         toast.success(responseData?.message);

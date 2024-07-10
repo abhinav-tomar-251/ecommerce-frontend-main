@@ -43,7 +43,7 @@ const OrderPage = () => {
   const [data, setData] = useState<Order[]>([]);
 
   const fetchOrderDetails = async () => {
-    const response = await axios.get(BackendApi.getOrder.url, {
+    const response = await axios(BackendApi.getOrder.url, {
       method: BackendApi.getOrder.method,
       withCredentials: true,
     });

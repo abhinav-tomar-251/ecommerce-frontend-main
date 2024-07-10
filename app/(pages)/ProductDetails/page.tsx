@@ -12,7 +12,7 @@ import { Product } from "@/types";
 import Header from "@/app/_components/Header";
 import Navbar from "@/app/_components/Navbar";
 import Footer from "@/app/_components/Footer";
-import axios from "axios";
+import { fetchProductDetails } from "@/actions/productdetails";
 
 const ProductDetails: React.FC = () => {
   const router = useRouter();
@@ -48,36 +48,20 @@ const ProductDetails: React.FC = () => {
 
   const { fetchUserAddToCart } = useAppContext();
 
-  const fetchProductDetails = async (_id: string) => {
-    setLoading(true);
-    try {
-      const response = await axios.get(
-        `${BackendApi.productDetails.url}/${_id}`,
-      );
-
-      if (response.status !== 200) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const dataResponse = response.data;
-
-      if (dataResponse.success) {
-        setData(dataResponse.data);
-        setActiveImage(dataResponse.data.productImage[0]);
-      } else {
-        console.error("API error:", dataResponse.message);
-      }
-    } catch (error) {
-      console.error("Fetch error:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    if (_id) {
-      fetchProductDetails(_id);
-    }
+    const fetchData = async () => {
+      if (_id) {
+        setLoading(true);
+        const product = await fetchProductDetails(_id);
+        if (product) {
+          setData(product);
+          setActiveImage(product.productImage[0]); 
+        }
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, [_id]);
 
   const handleMouseEnterProduct = (imageURL: string) => {
