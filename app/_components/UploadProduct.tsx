@@ -9,17 +9,9 @@ import { MdDelete } from "react-icons/md";
 import BackendApi from "../common";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { ProductData } from "@/types";
 
-interface ProductData {
-  productName: string;
-  brandName: string;
-  category: string;
-  productImage: string[];
-  description: string;
-  price: number;
-  rating: number;
-  sellingPrice: string;
-}
+
 
 interface UploadProductProps {
   onClose: () => void;
@@ -38,7 +30,7 @@ const UploadProduct: React.FC<UploadProductProps> = ({
     description: "",
     price: 0,
     rating: 0,
-    sellingPrice: "",
+    sellingPrice: 0,
   });
   const [openFullScreenImage, setOpenFullScreenImage] = useState(false);
   const [fullScreenImage, setFullScreenImage] = useState("");

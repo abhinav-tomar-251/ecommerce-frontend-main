@@ -1,20 +1,9 @@
 import axios from "axios";
 import BackendApi from "@/app/common";
+import { LoginData, RegisterData } from "@/types";
 
 
-interface RegisterData {
-    email: string;
-    password: string;
-    name: string;
-    confirmPassword: string;
-    profilePic: string;
-    subscribed_plan: string;
-}
 
-interface LoginData {
-  email: string;
-  password: string;
-}
 
 export const login = async (data: LoginData) => {
   try {
@@ -40,16 +29,7 @@ export const register = async (data: RegisterData) => {
     }
   };
 
-// export const forgotPassword = async (email: string) => {
-//   try {
-//     const response = await axios.post(BackendApi.forgotPassword.url, { email });
 
-//     return response.data;
-//   } catch (error) {
-//     console.error('Error requesting password reset:', error);
-//     throw new Error('Error requesting password reset. Please try again.');
-//   }
-// };
 interface ForgotPasswordResponse {
   message: string;
 }

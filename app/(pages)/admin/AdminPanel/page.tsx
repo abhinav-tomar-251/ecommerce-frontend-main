@@ -11,6 +11,7 @@ import Link from "next/link";
 import Header from "@/app/_components/Header";
 import Navbar from "@/app/_components/Navbar";
 import { BounceLoader } from "react-spinners";
+import { toast } from "react-toastify";
 
 const AdminPanel = () => {
   const router = useRouter();
@@ -21,6 +22,7 @@ const AdminPanel = () => {
     setLoading(true);
     if (user?.role !== ROLE.ADMIN) {
       setLoading(false);
+      toast.error("Please login as an Admin !")
       router.push("/");
     }
   }, [user, router]);

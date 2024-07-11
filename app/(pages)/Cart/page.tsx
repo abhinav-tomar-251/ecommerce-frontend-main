@@ -19,6 +19,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { BounceLoader } from "react-spinners";
 import BackendApi from "@/app/common";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 const CartPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -28,15 +29,13 @@ const CartPage: React.FC = () => {
 
   useEffect(() => {
     if (!user) {
-      router.push("/login");
+      toast.error("Please Login...!");
+      router.push("/auth/Login");
     } else {
       dispatch(fetchCart());
     }
   }, [dispatch, user, router]);
 
-  useEffect(() => {
-    dispatch(fetchCart());
-  }, [dispatch]);
 
   const handleUpdateQuantity = (id: string, quantity: number) => {
     dispatch(updateCart({ id, quantity }));
@@ -138,8 +137,7 @@ const CartPage: React.FC = () => {
   if (!user) {
     return (
       <div className="flex flex-col justify-center items-center h-screen">
-        <BounceLoader size={50} className="text-gray-800" loading />
-        <p className="bg-white py-5">Cart is Empty</p>
+        <BounceLoader size={150} className="text-gray-800" loading />
       </div>
     );
   }

@@ -2,8 +2,6 @@ import BackendApi from "@/app/common";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-
-
 export const fetchAllUsers = async () => {
     try {
       const fetchData = await axios(BackendApi.allUser.url, {

@@ -16,6 +16,4 @@ export const authRoutes = [
     "/auth/ForgotPassword",
 ];
 
-export const apiAuthPrefix = "/api/auth";
-
 export const DEFAULT_LOGIN_REDIRECT = "/Home";

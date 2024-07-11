@@ -41,7 +41,6 @@ const Subscribe = () => {
         <stripe-pricing-table
           pricing-table-id="prctbl_1PYitaSAko7jb74qDYq2bmk2"
           publishable-key="pk_test_51MwfthSAko7jb74qBqp0nLAr5MPlEB8t2IY4vWa87xkvPtqm6U1KxFPLP4mTpWFIbECSInfkr6zQtTWJiKe2Dc8l00QHNfLHMb"
-          // client-reference-id={process.env.STRIPE_CLIENT_REFERENCE_ID}
           customer-email={user.email}
         />
       </main>

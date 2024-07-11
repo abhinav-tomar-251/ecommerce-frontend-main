@@ -39,14 +39,13 @@ const Navbar: React.FC = () => {
         toast.error(data.message);
       }
     } catch (error) {
-      toast.error('Error logging out. Please try again.');
+      toast.error("Error logging out. Please try again.");
     }
   };
 
   useEffect(() => {
     fetchUserDetails();
   }, [fetchUserDetails]);
-
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -81,28 +80,28 @@ const Navbar: React.FC = () => {
   }, [search]);
 
   return (
-    <nav className="h-16 shadow-md bg-white w-full z-40">
-      <div className="h-full container mx-auto flex items-center px-4 justify-between">
+    <nav className="h-16 shadow-md flex bg-white w-full z-40">
+      
+      <div className="h-full container mx-auto flex items-center px-4 justify-between gap-2 ">
         <div>
           <Link href="/">
             <Logo />
           </Link>
         </div>
-
-        <form
+        <form 
           onSubmit={handleSubmit}
-          className="hidden md:flex items-center w-full justify-between max-w-sm border rounded-full focus-within:shadow pl-2 cursor-pointer"
+          className="hidden md:flex  md:items-center md:w-full md:justify-between max-w-sm border rounded-full focus-within:shadow  cursor-pointer"
         >
           <input
             type="text"
             placeholder="Search product here..."
-            className="w-full outline-none"
+            className="hidden md:flex md:w-full ml-2 outline-none"
             onChange={handleSearch}
             value={search}
           />
           <button
             type="submit"
-            className="text-lg min-w-[50px] h-8 bg-gray-600 flex items-center justify-center rounded-r-full text-white"
+            className="text-lg md:w-[50px]  h-8 bg-gray-600 flex items-center justify-center rounded-r-full text-white"
           >
             <GrSearch />
           </button>
@@ -171,7 +170,7 @@ const Navbar: React.FC = () => {
                   )}
                   <Link
                     href="/Order"
-                    className="whitespace-nowrap hidden sm:block hover:bg-slate-100 p-2"
+                    className="whitespace-nowrap  hover:bg-slate-100 p-2"
                     onClick={() => setMenuDisplay((prev) => !prev)}
                   >
                     My Orders

@@ -8,44 +8,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAppSelector } from "@/lib/hooks";
-import { User } from "@/types";
+import { Order, User } from "@/types";
 import ROLE from "@/app/common/role";
 import Header from "@/app/_components/Header";
 import Navbar from "@/app/_components/Navbar";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { BounceLoader } from "react-spinners";
-import axios from "axios";
 import { fetchOrderDetails } from "@/actions/alladminOrders";
+import { toast } from "react-toastify";
 
-interface ProductDetails {
-  productId: string;
-  name: string;
-  price: number;
-  quantity: number;
-  image: string[];
-}
-
-interface PaymentDetails {
-  payment_method_type: string[];
-  payment_status: string;
-}
-
-interface ShippingOptions {
-  shipping_rate: string;
-  shipping_amount: number;
-}
-
-interface Order {
-  name: string;
-  email: string;
-  userId: string;
-  receipt_url: string;
-  createdAt: string;
-  productDetails: ProductDetails[];
-  paymentDetails: PaymentDetails;
-  shipping_options: ShippingOptions[];
-  totalAmount: number;
-}
 
 const AllOrder: React.FC = () => {
   const router = useRouter();
@@ -56,6 +27,7 @@ const AllOrder: React.FC = () => {
     setLoading(true);
     if (user?.role !== ROLE.ADMIN) {
       setLoading(false);
+      toast.error("Please login as an Admin !")
       router.push("/");
     }
   }, [user, router]);

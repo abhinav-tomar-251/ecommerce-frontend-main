@@ -32,7 +32,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [cartProductCount, setCartProductCount] = useState(0);
 
   const fetchUserDetails = async () => {
-    const dataResponse = await axios.get(BackendApi.current_user.url, {
+    const dataResponse = await axios(BackendApi.current_user.url, {
       method: BackendApi.current_user.method,
       withCredentials: true,
     });
@@ -45,7 +45,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const fetchUserAddToCart = async () => {
-    const dataResponse = await axios.get(BackendApi.addToCartProductCount.url, {
+    const dataResponse = await axios(BackendApi.addToCartProductCount.url, {
       method: BackendApi.addToCartProductCount.method,
      withCredentials: true,
     });

@@ -27,7 +27,7 @@ const initialState: CartState = {
 };
 
 export const fetchCart = createAsyncThunk('cart/fetchCart', async () => {
-  const response = await axios.get(BackendApi.addToCartProductView.url, {
+  const response = await axios(BackendApi.addToCartProductView.url, {
     method: BackendApi.addToCartProductView.method,
     withCredentials: true,
   });

@@ -9,21 +9,12 @@ import { MdDelete } from "react-icons/md";
 import BackendApi from "../common";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { Product } from "@/types";
 
-interface ProductData {
-  productName: string;
-  brandName: string;
-  category: string;
-  productImage: string[];
-  description: string;
-  price: number;
-  rating: number;
-  sellingPrice: number;
-}
 
 interface AdminEditProductProps {
   onClose: () => void;
-  productData: ProductData;
+  productData: Product;
   fetchdata: () => void;
 }
 
@@ -32,7 +23,7 @@ const AdminEditProduct: React.FC<AdminEditProductProps> = ({
   productData,
   fetchdata,
 }) => {
-  const [data, setData] = useState<ProductData>({
+  const [data, setData] = useState<Product>({
     ...productData,
   });
 

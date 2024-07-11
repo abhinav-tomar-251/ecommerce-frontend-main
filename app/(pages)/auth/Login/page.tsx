@@ -3,7 +3,6 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash, FaUserCircle } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-import BackendApi from "@/app/common";
 import Header from "@/app/_components/Header";
 import Navbar from "@/app/_components/Navbar";
 import { toast } from "react-toastify";

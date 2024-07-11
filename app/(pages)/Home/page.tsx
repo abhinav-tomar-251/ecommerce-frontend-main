@@ -1,24 +1,14 @@
-"use client";
+
 import CategoryList from "@/app/_components/CategoryList";
 import Footer from "@/app/_components/Footer";
 import Header from "@/app/_components/Header";
 import HorizontalCardProduct from "@/app/_components/HorizontalCardProduct";
 import Navbar from "@/app/_components/Navbar";
 import VerticalCardProduct from "@/app/_components/VerticalCardProduct";
-import { useAppContext } from "@/context";
-import { useAppSelector } from "@/lib/hooks";
-import { User } from "@/types";
-import Image from "next/image";
-import React, { useEffect } from "react";
-import { FaRegCircleUser } from "react-icons/fa6";
+import React from "react";
 
 const HomePage = () => {
-  const { fetchUserDetails, cartProductCount } = useAppContext();
-  const user = useAppSelector((state) => state?.user?.user) as User;
-
-  useEffect(() => {
-    fetchUserDetails();
-  }, [fetchUserDetails]);
+  
 
   return (
     <>

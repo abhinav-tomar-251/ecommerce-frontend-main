@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import BackendApi from "@/app/common";
 import moment from "moment";
 import displayINRCurrency from "@/actions/displayCurrency";
 import Header from "@/app/_components/Header";
@@ -8,37 +7,8 @@ import Navbar from "@/app/_components/Navbar";
 import Image from "next/image";
 import { BounceLoader } from "react-spinners";
 import Link from "next/link";
-import NextBreadcrumb from "@/app/_components/breadNavigation";
-import { FaAngleRight } from "react-icons/fa6";
-import axios from "axios";
 import { fetchUserOrderDetails } from "@/actions/userOrder";
-interface ProductDetails {
-  productId: string;
-  name: string;
-  price: number;
-  quantity: number;
-  image: string[];
-}
-
-interface PaymentDetails {
-  payment_method_type: string[];
-  payment_status: string;
-}
-
-interface ShippingOptions {
-  shipping_rate: string;
-  shipping_amount: number;
-}
-
-interface Order {
-  userId: string;
-  createdAt: string;
-  receipt_url: string;
-  productDetails: ProductDetails[];
-  paymentDetails: PaymentDetails;
-  shipping_options: ShippingOptions[];
-  totalAmount: number;
-}
+import { Order } from "@/types";
 
 const OrderPage = () => {
   const [data, setData] = useState<Order[]>([]);

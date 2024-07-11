@@ -3,8 +3,6 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import { MdModeEdit } from "react-icons/md";
-import BackendApi from "@/app/common";
-import { toast } from "react-toastify";
 import ChangeUserRole from "../../../_components/ChangeUserRole";
 import Link from "next/link";
 import { FaRegCircleUser } from "react-icons/fa6";
@@ -16,8 +14,8 @@ import { useAppSelector } from "@/lib/hooks";
 import ROLE from "@/app/common/role";
 import { User } from "@/types";
 import { BounceLoader } from "react-spinners";
-import axios from 'axios';
 import { fetchAllUsers } from "@/actions/allUsers";
+import { toast } from "react-toastify";
 
 const AllUsers: React.FC = () => {
   const router = useRouter();
@@ -51,6 +49,7 @@ const AllUsers: React.FC = () => {
     setLoading(true);
     if (user?.role !== ROLE.ADMIN) {
       setLoading(false);
+      toast.error("Please login as an Admin !")
       router.push("/");
     }
   }, [user, router]);

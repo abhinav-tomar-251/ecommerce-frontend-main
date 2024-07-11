@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import UploadProduct from "../../../_components/UploadProduct";
-import BackendApi from "@/app/common";
 import AdminProductCard from "@/app/_components/AdminProductCard";
 import Header from "@/app/_components/Header";
 import Navbar from "@/app/_components/Navbar";
@@ -14,8 +13,8 @@ import { useAppSelector } from "@/lib/hooks";
 import ROLE from "@/app/common/role";
 import { User } from "@/types";
 import { BounceLoader } from "react-spinners";
-import axios from 'axios';
 import { fetchAdminAllProduct } from "@/actions/adminAllProducts";
+import { toast } from "react-toastify";
 
 
 const AllProducts = () => {
@@ -27,6 +26,7 @@ const AllProducts = () => {
     setLoading(true);
     if (user?.role !== ROLE.ADMIN) {
       setLoading(false);
+      toast.error("Please login as an Admin !")
       router.push("/");
     }
   }, [user, router]);

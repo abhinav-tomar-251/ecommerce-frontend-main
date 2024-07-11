@@ -2,20 +2,7 @@ import React, { useState } from "react";
 import { MdModeEditOutline } from "react-icons/md";
 import AdminEditProduct from "./AdminEditProduct";
 import displayINRCurrency from "../../actions/displayCurrency";
-
-interface AdminProductCardProps {
-  data: {
-    productName: string;
-    brandName: string;
-    category: string;
-    productImage: string[];
-    description: string;
-    price: number;
-    rating: number;
-    sellingPrice: number;
-  };
-  fetchdata: () => void;
-}
+import { AdminProductCardProps } from "@/types";
 
 const AdminProductCard: React.FC<AdminProductCardProps> = ({
   data,
