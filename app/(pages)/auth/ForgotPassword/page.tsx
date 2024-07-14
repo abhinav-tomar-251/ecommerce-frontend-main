@@ -23,6 +23,7 @@ const ForgotPassword: React.FC = () => {
     e.preventDefault();
     try {
       const response: ForgotPasswordResponse = await forgotPassword(email);
+      console.log('response', response)
       toast.success(response.message);
       router.push('/auth/Login');
     } catch (error) {

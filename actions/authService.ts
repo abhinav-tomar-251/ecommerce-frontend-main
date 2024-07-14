@@ -1,6 +1,7 @@
 import axios from "axios";
 import BackendApi from "@/app/common";
 import { LoginData, RegisterData } from "@/types";
+import { headers } from "next/headers";
 
 
 
@@ -29,14 +30,21 @@ export const register = async (data: RegisterData) => {
     }
   };
 
-
 interface ForgotPasswordResponse {
   message: string;
 }
 
 export const forgotPassword = async (email: string): Promise<ForgotPasswordResponse> => {
   try {
-    const response = await axios.post(BackendApi.forgotPassword.url, { email });
+    const response = await axios.post(
+      BackendApi.forgotPassword.url,
+      { email: email },
+    );
+
+    if (!response.data) {
+      throw new Error('Empty response received');
+    }
+
     return response.data;
   } catch (error) {
     console.error('Error requesting password reset:', error);
@@ -44,19 +52,26 @@ export const forgotPassword = async (email: string): Promise<ForgotPasswordRespo
   }
 };
 
-export const resetPassword = async (token: string, password: string): Promise<void> => {
-  try {
-    const response = await axios.post(
-      `${BackendApi.resetPassword.url}`,
-      { token, password },
-      { withCredentials: true }
-    );
-    return response.data;
-  } catch (error) {
-    console.error('Error resetting password:', error);
-    throw new Error('Error resetting password. Please try again.');
-  }
-};
+  export const resetPassword = async (token: string, password: string): Promise<void> => {
+    try {
+      const response = await axios.post(
+        `${BackendApi.resetPassword.url}`,
+        { token, password },
+        { withCredentials: true }
+      );
+  
+      if (response.status !== 200) {
+        throw new Error(`Error resetting password: ${response.statusText}`);
+      }
+  
+      console.log('reset-response', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error resetting password:', error);
+      throw new Error('Error resetting password. Please try again.');
+    }
+  };
+  
 
 export const logout = async () => {
   try {

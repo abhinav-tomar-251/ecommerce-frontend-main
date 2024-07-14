@@ -103,7 +103,7 @@ const VerticalCardProduct: React.FC<VerticalCardProductProps> = ({
                   pathname: `/ProductDetails`,
                   query: { _id: product._id },
                 }}
-                className="w-full min-w-[280px] md:min-w-[320px] max-w-[280px] md:max-w-[320px] bg-white rounded-md shadow"
+                className="w-full min-w-[280px] md:min-w-[320px] max-w-[280px] md:max-w-[320px] bg-slate-50 rounded-md shadow"
               >
                 <div className="bg-slate-200 h-48 p-4 min-w-[280px] md:min-w-[145px] flex justify-center items-center">
                   <img
